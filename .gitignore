@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+output_audio.wav
+tts_output.wav
+voice_sample.wav
+articulate.db

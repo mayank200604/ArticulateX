@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArticulateX — AI Communication Coach</title>
+  <meta name="description"
+    content="Train your fluency, confidence, and composure with ArticulateX — an AI-powered spoken English communication coach for Indian students and professionals." />
+  <meta name="theme-color" content="#0D0D0B" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css?v=5" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 1 — LANDING                          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-left">
+      <div class="landing-logo">
+        <span class="logo-text">Articulate<span class="logo-x">X</span></span>
+      </div>
+
+      <div class="landing-hero">
+        <p class="landing-eyebrow">Communication Training &nbsp;·&nbsp; AI Powered</p>
+        <h1 class="landing-headline">
+          <span class="word-reveal">Speak</span>
+          <span class="word-reveal headline-muted">with</span>
+          <span class="word-reveal headline-accent">conviction.</span>
+        </h1>
+        <p class="landing-subtext">
+          Train your fluency, confidence, and composure.<br />
+          Five modes. Real pressure. Honest feedback.
+        </p>
+        <div class="landing-actions">
+          <button id="btn-start-training" class="btn-primary">Start Training</button>
+          <button id="btn-how-it-works" class="btn-ghost">How it works <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <div class="landing-stats">
+        <div class="stat-item">
+          <span id="stat-sessions" class="stat-number">—</span>
+          <span class="stat-label">sessions</span>
+        </div>
+        <div class="stat-dot">·</div>
+        <div class="stat-item">
+          <span id="stat-turns" class="stat-number">—</span>
+          <span class="stat-label">turns practiced</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="landing-right">
+      <div id="voice-circle-landing" class="voice-circle-container"></div>
+      <div class="landing-radial"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- GLOBAL NAV (shared, injected in JS)         -->
+  <!-- ═══════════════════════════════════════════ -->
+  <nav id="global-nav" class="global-nav hidden">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="logo-text">Articulate<span class="logo-x">X</span></span>
+      </div>
+      <div class="nav-links">
+        <button id="nav-home" class="nav-link active-link" data-screen="screen-home">Home</button>
+        <button id="nav-progress" class="nav-link" data-screen="screen-dashboard">Progress</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 2 — HOME (MODE SELECTION)            -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-home" class="screen">
+    <div class="home-layout">
+      <!-- Sidebar -->
+      <aside class="home-sidebar">
+        <nav class="mode-nav" role="navigation" aria-label="Training modes">
+          <!-- Calibration card (shown only for new users) -->
+          <div id="calibration-card" class="calibration-card hidden">
+            <div class="cal-card-icon">🎯</div>
+            <div class="cal-card-text">
+              <span class="cal-card-title">Calibration Session</span>
+              <span class="cal-card-desc">Let us hear how you speak today. 3 quick turns, no pressure.</span>
+            </div>
+            <button id="btn-start-calibration" class="btn-primary cal-card-btn">Begin Calibration</button>
+          </div>
+
+          <button class="mode-nav-item active" data-mode="freestyle" id="mode-btn-freestyle">
+            <span class="mode-num">01</span>
+            <div class="mode-nav-text">
+              <span class="mode-nav-name">FreeStyle</span>
+              <span class="mode-nav-desc">Warm up your voice</span>
+            </div>
+            <span class="lock-icon hidden" aria-hidden="true">🔒</span>
+            <span class="lock-condition hidden"></span>
+          </button>
+          <button class="mode-nav-item" data-mode="debate1" id="mode-btn-debate1">
+            <span class="mode-num">02</span>
+            <div class="mode-nav-text">
+              <span class="mode-nav-name">Debate · Easy</span>
+              <span class="mode-nav-desc">Build fluency</span>
+            </div>
+            <span class="lock-icon hidden" aria-hidden="true">🔒</span>
+            <span class="lock-condition hidden"></span>
+          </button>
+          <button class="mode-nav-item" data-mode="debate2" id="mode-btn-debate2">
+            <span class="mode-num">03</span>
+            <div class="mode-nav-text">
+              <span class="mode-nav-name">Debate · Medium</span>
+              <span class="mode-nav-desc">Hold your ground</span>
+            </div>
+            <span class="lock-icon hidden" aria-hidden="true">🔒</span>
+            <span class="lock-condition hidden"></span>
+          </button>
+          <button class="mode-nav-item" data-mode="debate3" id="mode-btn-debate3">
+            <span class="mode-num">04</span>
+            <div class="mode-nav-text">
+              <span class="mode-nav-name">Debate · Hard</span>
+              <span class="mode-nav-desc">Maximum pressure</span>
+            </div>
+            <span class="lock-icon hidden" aria-hidden="true">🔒</span>
+            <span class="lock-condition hidden"></span>
+          </button>
+          <button class="mode-nav-item" data-mode="weird" id="mode-btn-weird">
+            <span class="mode-num">05</span>
+            <div class="mode-nav-text">
+              <span class="mode-nav-name">Weird Situation</span>
+              <span class="mode-nav-desc">React to anything</span>
+            </div>
+            <span class="lock-icon hidden" aria-hidden="true">🔒</span>
+            <span class="lock-condition hidden"></span>
+          </button>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-stats">
+          <div class="sidebar-stat">
+            <span id="sb-sessions" class="sidebar-stat-num">0</span>
+            <span class="sidebar-stat-label">Total Sessions</span>
+          </div>
+          <div class="sidebar-stat">
+            <span id="sb-streak" class="sidebar-stat-num">0</span>
+            <span class="sidebar-stat-label">Day Streak</span>
+          </div>
+          <div class="sidebar-stat">
+            <span id="sb-wpm" class="sidebar-stat-num">0</span>
+            <span class="sidebar-stat-label">Avg WPM</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="home-main">
+        <div class="mode-detail" id="mode-detail">
+          <!-- Voice circle decoration -->
+          <div id="voice-circle-home" class="voice-circle-container voice-circle-home"></div>
+
+          <div class="mode-detail-inner">
+            <h2 id="mode-detail-name" class="mode-detail-name">FreeStyle</h2>
+            <p id="mode-detail-tagline" class="mode-detail-tagline">Speak freely on any prompt</p>
+
+            <div id="mode-detail-desc" class="mode-detail-desc"></div>
+
+            <div id="mode-difficulty" class="mode-difficulty hidden">
+              <div class="difficulty-bar">
+                <div class="difficulty-seg" id="diff-1"></div>
+                <div class="difficulty-seg" id="diff-2"></div>
+                <div class="difficulty-seg" id="diff-3"></div>
+              </div>
+            </div>
+
+            <div id="mode-recent-sessions" class="mode-recent-sessions"></div>
+
+            <button id="btn-begin-mode" class="btn-begin-mode">Begin This Mode</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 3 — SESSION SETUP                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-setup" class="screen">
+    <div class="setup-wrap">
+      <div class="setup-top">
+        <button id="btn-setup-back" class="back-link">← Back</button>
+        <div class="setup-progress-dots">
+          <span class="progress-dot active" id="pdot-1"></span>
+          <span class="progress-dot" id="pdot-2"></span>
+          <span class="progress-dot" id="pdot-3"></span>
+        </div>
+      </div>
+
+      <div class="setup-column">
+        <!-- Step 1: Topic -->
+        <div id="setup-step-topic" class="setup-step active-step">
+          <p class="setup-label">Choose your topic</p>
+          <div id="topic-cards" class="topic-cards"></div>
+
+          <!-- For debate2/3 — auto-assigned topic -->
+          <div id="topic-assigned" class="topic-assigned hidden">
+            <p class="setup-label">Your topic</p>
+            <div id="assigned-topic-card" class="assigned-topic-card">
+              <span id="assigned-topic-text" class="assigned-topic-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Side -->
+        <div id="setup-step-side" class="setup-step hidden">
+          <p class="setup-label">Choose your side</p>
+          <div class="side-buttons">
+            <button id="side-for" class="side-btn side-for" data-side="for">
+              <span class="side-label">FOR</span>
+              <span class="side-desc">Argue in favour</span>
+            </button>
+            <button id="side-against" class="side-btn side-against" data-side="against">
+              <span class="side-label">AGAINST</span>
+              <span class="side-desc">Argue against</span>
+            </button>
+          </div>
+
+          <!-- Level 3: random side reveal -->
+          <div id="side-random" class="side-random hidden">
+            <div class="side-flip-card" id="side-flip-card">
+              <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">?</div>
+                <div class="flip-back" id="flip-back-text"></div>
+              </div>
+            </div>
+            <p class="side-assigned-note">Your side has been assigned. Adapt.</p>
+          </div>
+        </div>
+
+        <!-- Step 3: Begin -->
+        <div id="setup-step-begin" class="setup-step hidden">
+          <button id="btn-begin-session" class="btn-begin-session">Begin Session</button>
+          <p id="silence-note" class="silence-note"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 4 — LIVE SESSION                     -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-session" class="screen">
+
+    <!-- Zone A: Top bar -->
+    <header class="session-topbar">
+      <div class="topbar-turn">
+        <span class="topbar-turn-label">TURN</span>
+        <span id="turn-counter" class="topbar-turn-num">0</span>
+      </div>
+      <div class="topbar-topic">
+        <span id="session-topic-display" class="topbar-topic-text"></span>
+      </div>
+      <div class="topbar-badges">
+        <span id="badge-side" class="badge badge-side"></span>
+        <span id="badge-level" class="badge badge-level"></span>
+      </div>
+    </header>
+
+    <!-- Zone B: Conversation area -->
+    <div class="session-conversation" id="session-conversation">
+      <div id="voice-circle-session" class="voice-circle-container voice-circle-session"></div>
+      <div class="session-empty-state" id="session-empty-state">
+        <p class="session-empty-text">Your first turn is waiting.</p>
+      </div>
+      <div id="chat-messages" class="chat-messages"></div>
+    </div>
+
+    <!-- Zone C: Live transcript bar -->
+    <div class="transcript-bar" id="transcript-bar">
+      <span id="transcript-text" class="transcript-text placeholder">Your words will appear here as you speak...</span>
+      <span class="transcript-cursor hidden" id="transcript-cursor">|</span>
+    </div>
+
+    <!-- Zone D: Recording bar -->
+    <div class="recording-bar">
+      <div class="rec-bar-inner">
+
+        <!-- Left: metrics -->
+        <div class="rec-metrics">
+          <div class="rec-metric">
+            <span id="metric-wpm" class="rec-metric-num">—</span>
+            <span class="rec-metric-label">WPM</span>
+          </div>
+          <div class="rec-metric">
+            <span id="metric-fillers" class="rec-metric-num">—</span>
+            <span class="rec-metric-label">FILLERS</span>
+          </div>
+          <div class="rec-metric">
+            <span id="metric-hedging" class="rec-metric-num">—</span>
+            <span class="rec-metric-label">HEDGING</span>
+          </div>
+        </div>
+
+        <!-- Center: record button -->
+        <div class="rec-center">
+          <div class="record-button-wrap">
+            <!-- Pulse rings (recording state) -->
+            <div class="ring ring-1" id="ring-1"></div>
+            <div class="ring ring-2" id="ring-2"></div>
+            <!-- Record button -->
+            <button id="record-btn" class="record-btn" aria-label="Record">
+              <span class="rec-btn-icon" id="rec-btn-icon"></span>
+              <!-- Processing arc -->
+              <svg class="processing-arc" id="processing-arc" viewBox="0 0 56 56" aria-hidden="true">
+                <circle class="arc-track" cx="28" cy="28" r="24" />
+                <circle class="arc-spinner" cx="28" cy="28" r="24" />
+              </svg>
+            </button>
+          </div>
+          <span id="rec-status" class="rec-status">PRESS TO RECORD</span>
+        </div>
+
+        <!-- Right: actions -->
+        <div class="rec-actions">
+          <button id="btn-submit-turn" class="rec-action-btn rec-action-submit">Submit Turn</button>
+          <button id="btn-get-feedback" class="rec-action-btn rec-action-feedback">Get Feedback</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden audio element for TTS autoplay -->
+    <audio id="tts-audio" src="" preload="none" style="display:none"></audio>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 5 — FEEDBACK REPORT                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-report" class="screen">
+
+    <!-- Top strip -->
+    <div class="report-strip" id="report-strip">
+      <span id="rstrip-mode" class="rstrip-mode"></span>
+      <span class="rstrip-sep">·</span>
+      <span id="rstrip-topic" class="rstrip-topic"></span>
+      <span class="rstrip-sep">·</span>
+      <span id="rstrip-turns" class="rstrip-turns"></span>
+      <span class="rstrip-sep">·</span>
+      <span id="rstrip-wpm" class="rstrip-wpm"></span>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="report-body">
+      <!-- Left: report sections -->
+      <div class="report-left" id="report-sections">
+
+        <!-- Section 1: Overall Verdict -->
+        <div class="report-card stagger-card" id="rcard-verdict">
+          <span class="report-card-label">OVERALL VERDICT</span>
+          <p id="r-verdict" class="report-verdict-text"></p>
+        </div>
+
+        <!-- Section 2: What Worked -->
+        <div class="report-card stagger-card report-card-green" id="rcard-worked">
+          <span class="report-card-label">WHAT WORKED</span>
+          <div id="r-worked" class="report-body-text"></div>
+        </div>
+
+        <!-- Section 3: The Main Problem -->
+        <div class="report-card stagger-card report-card-red" id="rcard-problem">
+          <span class="report-card-label">THE MAIN PROBLEM</span>
+          <div id="r-problem" class="report-body-text"></div>
+        </div>
+
+        <!-- Section 4: The Pattern -->
+        <div class="report-card stagger-card report-card-orange" id="rcard-pattern">
+          <span class="report-card-label">THE PATTERN</span>
+          <div id="r-pattern" class="report-body-text"></div>
+        </div>
+
+        <!-- Section 5: Confidence Report -->
+        <div class="report-card stagger-card report-card-blue" id="rcard-confidence">
+          <span class="report-card-label">CONFIDENCE REPORT</span>
+          <div id="r-confidence" class="report-body-text"></div>
+          <div id="r-hedge-dots" class="hedge-dots"></div>
+        </div>
+
+        <!-- Section 6: Three Things to Fix -->
+        <div class="report-card stagger-card" id="rcard-fixes">
+          <span class="report-card-label">THREE THINGS TO FIX</span>
+          <div id="r-fixes" class="fixes-list"></div>
+        </div>
+
+        <!-- Section 7: Earned Encouragement -->
+        <div class="report-card stagger-card report-card-green" id="rcard-encourage">
+          <span class="report-card-label">ONE EARNED ENCOURAGEMENT</span>
+          <div id="r-encourage" class="report-body-text"></div>
+        </div>
+
+        <!-- Section 8: Next Session Recommendation (debate only) -->
+        <div class="report-card stagger-card report-card-recommendation hidden" id="rcard-recommendation">
+          <span class="report-card-label">NEXT SESSION</span>
+          <p id="r-recommendation" class="report-recommendation-text"></p>
+        </div>
+
+        <!-- Section 9: Before and After Audio Milestone -->
+        <div class="report-card stagger-card report-card-blue hidden" id="rcard-milestone">
+          <span class="report-card-label">HEAR HOW FAR YOU HAVE COME</span>
+          <p class="report-body-text" style="margin-bottom: 12px;">You've hit a session milestone! Listen to your first recorded turn compared to today.</p>
+          <div class="milestone-audio-actions" style="display: flex; gap: 12px;">
+            <button id="btn-play-before" class="btn-primary" style="flex: 1;">▶ Play Before</button>
+            <button id="btn-play-after" class="btn-primary" style="flex: 1;">▶ Play After</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: sidebar -->
+      <aside class="report-sidebar">
+        <!-- Metric cards -->
+        <div class="report-sidebar-metrics">
+          <div class="rsidebar-metric">
+            <span id="rsm-turns" class="rsm-num">—</span>
+            <span class="rsm-label">TURNS</span>
+          </div>
+          <div class="rsidebar-metric">
+            <span id="rsm-wpm" class="rsm-num">—</span>
+            <span class="rsm-label">AVG WPM</span>
+          </div>
+          <div class="rsidebar-metric">
+            <span id="rsm-fillers" class="rsm-num">—</span>
+            <span class="rsm-label">TOTAL FILLERS</span>
+          </div>
+          <div class="rsidebar-metric">
+            <span id="rsm-hedging" class="rsm-num">—</span>
+            <span class="rsm-label">HEDGING SIGNALS</span>
+          </div>
+        </div>
+
+        <!-- Audio controls -->
+        <div class="rsidebar-audio">
+          <p class="rsidebar-section-label">LISTEN</p>
+          <button id="btn-hear-summary" class="rsidebar-audio-btn">▶ Hear Summary</button>
+          <button id="btn-hear-report" class="rsidebar-audio-btn rsidebar-audio-btn-muted">▶ Hear Full Report</button>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="rsidebar-actions">
+          <button id="btn-new-session" class="btn-primary btn-full">New Session</button>
+          <button id="btn-view-progress" class="btn-outline btn-full">View Progress</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 6 — PROGRESS DASHBOARD               -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-dashboard" class="screen">
+    <div class="dashboard-wrap">
+      <header class="dashboard-header">
+        <h1 class="dash-title">Progress</h1>
+        <p class="dash-subtitle">Your training history</p>
+      </header>
+
+      <!-- Mode filter tabs -->
+      <div class="dash-tabs" id="dash-tabs">
+        <button class="dash-tab active" data-filter="overview">Overview</button>
+        <button class="dash-tab" data-filter="freestyle">Freestyle</button>
+        <button class="dash-tab" data-filter="debate">Debate</button>
+        <button class="dash-tab" data-filter="weird">Weird Situation</button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="dash-stats-grid">
+        <div class="dash-stat-card">
+          <span id="ds-sessions" class="dash-stat-num">0</span>
+          <span class="dash-stat-label">SESSIONS</span>
+        </div>
+        <div class="dash-stat-card">
+          <span id="ds-turns" class="dash-stat-num">0</span>
+          <span class="dash-stat-label">TURNS</span>
+        </div>
+        <div class="dash-stat-card">
+          <span id="ds-wpm" class="dash-stat-num">0</span>
+          <span class="dash-stat-label">AVG WPM</span>
+        </div>
+        <div class="dash-stat-card">
+          <span id="ds-fillers" class="dash-stat-num">0</span>
+          <span class="dash-stat-label">AVG FILLERS</span>
+        </div>
+      </div>
+
+      <!-- Charts 2x2 -->
+      <div class="dash-charts-grid">
+        <div class="dash-chart-card">
+          <div class="chart-header">
+            <p class="chart-title">FILLER WORDS PER SESSION</p>
+            <p class="chart-subtitle">Lower is progress</p>
+          </div>
+          <canvas id="chart-fillers" height="160"></canvas>
+        </div>
+        <div class="dash-chart-card">
+          <div class="chart-header">
+            <p class="chart-title">WORDS PER MINUTE</p>
+            <p class="chart-subtitle">Target: 130–160</p>
+          </div>
+          <canvas id="chart-wpm" height="160"></canvas>
+        </div>
+        <div class="dash-chart-card">
+          <div class="chart-header">
+            <p class="chart-title" id="chart-dist-title">TRAINING DISTRIBUTION</p>
+            <p class="chart-subtitle" id="chart-dist-subtitle">Sessions by mode</p>
+          </div>
+          <div class="donut-wrap">
+            <canvas id="chart-modes" height="200"></canvas>
+            <div class="donut-center" id="donut-center">
+              <span id="donut-total" class="donut-total">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="dash-chart-card streak-card">
+          <div class="chart-header">
+            <p class="chart-title">CURRENT STREAK</p>
+          </div>
+          <div class="streak-display">
+            <span id="streak-num" class="streak-num">0</span>
+            <span class="streak-label">day streak</span>
+          </div>
+          <div id="streak-calendar" class="streak-calendar"></div>
+        </div>
+      </div>
+
+      <!-- Session history table -->
+      <div class="dash-table-wrap">
+        <table class="dash-table" id="dash-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Mode</th>
+              <th>Topic</th>
+              <th>Turns</th>
+              <th>WPM</th>
+              <th>Fillers</th>
+            </tr>
+          </thead>
+          <tbody id="dash-table-body"></tbody>
+        </table>
+        <div id="dash-empty" class="dash-empty hidden">
+          <p class="dash-empty-text">Your training starts here.</p>
+          <span class="dash-empty-arrow">↑ head home to begin</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- GLOBAL: TOAST NOTIFICATION                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="toast" class="toast hidden" role="alert" aria-live="polite">
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 7 — CALIBRATION REPORT              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-calibration-report" class="screen">
+    <div class="cal-report-wrap">
+      <div class="cal-report-header">
+        <span class="cal-report-eyebrow">CALIBRATION COMPLETE</span>
+        <h1 class="cal-report-title">Your Baseline</h1>
+        <p class="cal-report-subtitle">Here is how you speak today. These are your starting numbers.</p>
+      </div>
+
+      <div class="cal-report-metrics">
+        <div class="cal-metric-card">
+          <span id="cal-wpm" class="cal-metric-num">—</span>
+          <span class="cal-metric-label">AVG WPM</span>
+        </div>
+        <div class="cal-metric-card">
+          <span id="cal-fillers" class="cal-metric-num">—</span>
+          <span class="cal-metric-label">AVG FILLERS</span>
+        </div>
+        <div class="cal-metric-card">
+          <span id="cal-top-filler" class="cal-metric-num cal-metric-word">—</span>
+          <span class="cal-metric-label">MOST COMMON FILLER</span>
+        </div>
+        <div class="cal-metric-card">
+          <span id="cal-hedging" class="cal-metric-num">—</span>
+          <span class="cal-metric-label">HEDGING SIGNALS</span>
+        </div>
+      </div>
+
+      <div class="cal-recommendation" id="cal-recommendation">
+        <p id="cal-rec-text" class="cal-rec-text"></p>
+      </div>
+
+      <button id="btn-cal-continue" class="btn-primary cal-continue-btn">Continue to Training</button>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=2" defer></script>
+</body>
+
+</html>

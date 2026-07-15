@@ -1,0 +1,1341 @@
+{
+  "metadata": {
+    "generated_at": "2026-06-07T11:35:21.710455",
+    "framework_version": "2.0",
+    "mode": "fast"
+  },
+  "summary": {
+    "total_rules_evaluated": 115,
+    "evaluated_rules": 104,
+    "pass": 89,
+    "partial": 8,
+    "fail": 7,
+    "skip": 11,
+    "error": 0,
+    "unknown": 0,
+    "pass_rate_percent": 85.6
+  },
+  "scenarios": [
+    {
+      "scenario": "FreeStyle — Random Word",
+      "mode": "freestyle",
+      "level": 0,
+      "topic": "resilience",
+      "rule_evaluations": [
+        {
+          "rule": "AI must ask exactly ONE follow-up question per turn",
+          "result": "PASS",
+          "reason": "Exactly one question per turn in all responses.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI response must be 1-2 sentences maximum",
+          "result": "PASS",
+          "reason": "All responses were 1-2 sentences.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never use banned phrases: great point / excellent / well argued / good point / well done / interesting / that said / however / perfectly said",
+          "result": "FAIL",
+          "reason": "Banned phrases used: Turn 5: 'interesting'",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must vary sentence starter every turn — never start two consecutive responses the same way",
+          "result": "FAIL",
+          "reason": "Repeated starters: Turn 5: repeated starter 'that's'",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never mention fillers or delivery issues during turns",
+          "result": "PASS",
+          "reason": "No filler mentions detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "No debate or argument in freestyle mode",
+          "result": "PASS",
+          "reason": "No debate language detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct grammar or vocabulary",
+          "result": "PASS",
+          "reason": "No grammar corrections detected in AI responses.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct Indian English expressions",
+          "result": "PASS",
+          "reason": "No Indian English corrections detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never ask for data, statistics, evidence, or research",
+          "result": "PASS",
+          "reason": "No evidence demands detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never challenge whether argument is factually correct",
+          "result": "PASS",
+          "reason": "No factual challenges detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never judge intellectual strength of the point",
+          "result": "PASS",
+          "reason": "No intellectual judgments detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must respond in simple clear English",
+          "result": "PASS",
+          "reason": "Responses use simple English.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must acknowledge what the user said briefly and genuinely",
+          "result": "PASS",
+          "reason": "The AI consistently acknowledged the user's statements with phrases like 'That's a really thoughtful way to describe resilience' and 'That's a beautiful perspective on resilience'.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must keep the user speaking comfortably",
+          "result": "PASS",
+          "reason": "The AI's responses, such as 'What's an example of a difficult situation where you felt like you bounced back strongly?' and 'Can you tell me about a time when you saw resilience make a difference at work or in someone's career?', encouraged the user to continue speaking.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must be warm and genuinely curious in tone",
+          "result": "PASS",
+          "reason": "The AI maintained a warm and curious tone throughout the conversation, using phrases like 'That's really interesting' and 'I'd love to hear more'.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never challenge, correct, or evaluate content",
+          "result": "PASS",
+          "reason": "The AI never challenged or corrected the user's statements, instead focusing on exploring their thoughts and experiences with open-ended questions.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "There is no right or wrong answer in freestyle",
+          "result": "PASS",
+          "reason": "The AI did not imply any right or wrong answers, instead allowing the user to freely express their thoughts and opinions.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must sound like a real person, not a robot",
+          "result": "PASS",
+          "reason": "The AI's language and responses, such as 'That's a really thoughtful way to describe resilience' and 'I'd love to hear more', sounded natural and similar to human conversation.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "global"
+        },
+        {
+          "rule": "ONE EARNED ENCOURAGEMENT is mandatory",
+          "result": "PASS",
+          "reason": "Feedback contains an encouragement section.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never evaluate factual accuracy of argument",
+          "result": "PASS",
+          "reason": "No factual evaluation detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never ask for strong evidence",
+          "result": "PASS",
+          "reason": "No evidence demands detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never judge intellectual depth of point",
+          "result": "PASS",
+          "reason": "No intellectual judgments detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must not contain invented statistics or research references",
+          "result": "PASS",
+          "reason": "No invented statistics found.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback harshness is 2 out of 10",
+          "result": "PASS",
+          "reason": "The feedback provided is gentle and constructive, focusing on improvement rather than criticism.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "OVERALL VERDICT must be positive or neutral only",
+          "result": "PASS",
+          "reason": "The overall verdict describes the communicator as 'developing' with 'room for improvement', which is neutral.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "WHAT WORKED must find at least 2 genuine things",
+          "result": "PASS",
+          "reason": "The feedback identifies two strengths: the ability to finish thoughts and the attempt to provide a personal experience.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+          "result": "PASS",
+          "reason": "The suggestions for improvement are straightforward, encouraging, and feasible for the communicator to work on.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+          "result": "PARTIAL",
+          "reason": "While most suggestions focus on fluency and flow, one point indirectly touches on content by implying a clearer expression of resilience.",
+          "eval_type": "llm",
+          "confidence": 0.7,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+          "result": "PARTIAL",
+          "reason": "The feedback mostly avoids commenting on content quality but suggests rephrasing sentences in a way that could be interpreted as improving argument strength.",
+          "eval_type": "llm",
+          "confidence": 0.6,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+          "result": "PASS",
+          "reason": "At least two of the suggestions (reducing filler words and improving pace) are directly related to communication fixes.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "feedback"
+        }
+      ],
+      "turn_data": [
+        {
+          "turn": 1,
+          "user_input": "Um so resilience is like you know the ability to kind of bounce back from difficult situations I think maybe.",
+          "transcript": "I'm so resilient is like you know the ability to kind of bounce back from difficult situations I think maybe.",
+          "ai_response": "That's a really thoughtful way to describe resilience. What's an example of a difficult situation where you felt like you bounced back strongly?",
+          "is_interrupt": false,
+          "wpm": 148,
+          "fillers": 4,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 2,
+          "user_input": "I have experienced resilience when I failed my exam and then I started again from the beginning.",
+          "transcript": "I have experienced resilience when I failed my exam and then I started again from the beginning.",
+          "ai_response": "That sounds like a tough experience, but it's great that you started again. What helped you to begin anew after facing such a setback?",
+          "is_interrupt": false,
+          "wpm": 148,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 3,
+          "user_input": "Thank you.",
+          "transcript": "",
+          "ai_response": "",
+          "is_interrupt": false,
+          "wpm": 0,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": "TOO SHORT — speak for at least 2 seconds"
+        },
+        {
+          "turn": 4,
+          "user_input": "Resilience is also about mental strength and not giving up even when things are hard for you.",
+          "transcript": "Resilience is also about mental strength and not giving up even when things are hard for you.",
+          "ai_response": "That's a beautiful perspective on resilience. What does mental strength mean to you in those tough moments when you feel like giving up?",
+          "is_interrupt": false,
+          "wpm": 155,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 5,
+          "user_input": "I think resilience kind of helps people in like professional life also you know.",
+          "transcript": "I think resilience kind of helps people in like professional life also you know.",
+          "ai_response": "That's really interesting, I'd love to hear more about how you think resilience plays out in a professional setting. Can you tell me about a time when you saw resilience make a difference at work or in someone's career?",
+          "is_interrupt": false,
+          "wpm": 141,
+          "fillers": 4,
+          "just_did_redo": false,
+          "error": null
+        }
+      ],
+      "feedback_received": {
+        "full_report": "OVERALL VERDICT\nThey are a developing communicator with room for improvement in fluency and confidence.\n\nWHAT WORKED\nTheir ability to finish their thoughts, as seen in \"I think resilience kind of helps people in like professional life also you know.\" Additionally, their attempt to provide a personal experience, \"I have experienced resilience when I failed my exam and then I started again from the beginning.\"\n\nTHE MAIN PROBLEM\nThe single biggest communication issue is the frequent use of filler words, as seen in \"I'm so resilient is like you know the ability to kind of bounce back from difficult situations I think maybe.\"\n\nTHE PATTERN\nThe repetition of hedging signals across turns, such as in Turn 1 \"I think\" and Turn 4 \"you know\", which can make them appear less confident to a real listener.\n\nCONFIDENCE REPORT\nTotal hedging signals found: 7. Top 2 most frequent signals: \"I think\" and \"kind of\". The single worst moment: \"I'm so resilient is like you know the ability to kind of bounce back from difficult situations I think maybe.\" This signals a lack of confidence to a real listener.\n\nTHREE THINGS TO FIX\nPOINT: Filler words disrupt the flow. \nREASON: This hurts their credibility with the listener. \nEXAMPLE: \"I'm so resilient is like you know the ability to kind of bounce back from difficult situations I think maybe.\" \nTRY THIS INSTEAD: \"I'm resilient, which means I can bounce back from difficult situations.\"\nPOINT: Hedging signals undermine confidence. \nREASON: This makes the listener doubt their conviction. \nEXAMPLE: \"I think resilience kind of helps people in like professional life also you know.\" \nTRY THIS INSTEAD: \"Resilience helps people in professional life.\"\nPOINT: Slow pace can put off the listener. \nREASON: This can lead to a lack of engagement. \nEXAMPLE: \"I have experienced resilience when I failed my exam and then I started again from the beginning.\" \nTRY THIS INSTEAD: \"I failed my exam, but I started again from the beginning, which shows my resilience.\"\n\nONE EARNED ENCOURAGEMENT\nTheir moment of clarity in \"Resilience is also about mental strength and not giving up even when things are hard for you\" showed genuine communication potential.\n\nSPOKEN SUMMARY\nYou have a tendency to use filler words, try to speak more clearly, this will help you sound more confident, and let's work on that for next time.",
+        "spoken_summary": "You have a tendency to use filler words, try to speak more clearly, this will help you sound more confident, and let's work on that for next time.",
+        "total_turns": 4,
+        "avg_wpm": 148.0,
+        "avg_fillers": 2.0,
+        "total_fillers": 8,
+        "total_confidence_signals": 7,
+        "mode": "freestyle",
+        "topic": "resilience",
+        "level": 0
+      },
+      "avg_confidence": 0.903
+    },
+    {
+      "scenario": "Debate Level 1",
+      "mode": "debate1",
+      "level": 1,
+      "topic": "Social media does more harm than good",
+      "rule_evaluations": [
+        {
+          "rule": "Zero interruptions — interrupt probability is 0.0",
+          "result": "PASS",
+          "reason": "No interruptions occurred.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "DEMAND_ONE_SENTENCE strategy is completely banned in Level 1",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "PUSH_BACK_HARD strategy is completely banned in Level 1",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "INTERRUPT_REDIRECT strategy is completely banned in Level 1",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "CHANGE_TOPIC strategy is completely banned in Level 1",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "MISUNDERSTAND strategy is completely banned in Level 1",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "Turn 1-2 also bans DEVILS_ADVOCATE and ASK_FOR_EVIDENCE",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "No demand for one sentence on Turn 1 regardless of level",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "No ASK_TO_REPEAT on Turn 1 regardless of level",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "No demand for one sentence when user spoke 30+ words",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "No ASK_TO_REPEAT when user spoke 30+ words",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never use banned phrases: great point / excellent / well argued / good point / well done / interesting / that said / however / perfectly said",
+          "result": "FAIL",
+          "reason": "Banned phrases used: Turn 3: 'interesting'",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Maximum 2-3 sentences per response",
+          "result": "PASS",
+          "reason": "All responses were within 2-3 sentences.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Vary sentence starter every turn — never start two consecutive responses the same way",
+          "result": "PASS",
+          "reason": "All consecutive responses have different starters.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never ask for data, statistics, evidence, or research",
+          "result": "PASS",
+          "reason": "No evidence demands detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never challenge whether argument is factually correct",
+          "result": "PASS",
+          "reason": "No factual challenges detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never judge intellectual strength of the point",
+          "result": "PASS",
+          "reason": "No intellectual judgments detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct grammar or vocabulary",
+          "result": "PASS",
+          "reason": "No grammar corrections detected in AI responses.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct Indian English expressions",
+          "result": "PASS",
+          "reason": "No Indian English corrections detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must respond in simple clear English",
+          "result": "PASS",
+          "reason": "Responses use simple English.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI's job is to keep the user speaking — fluency is everything",
+          "result": "PASS",
+          "reason": "The AI consistently encouraged the user to continue speaking throughout the conversation.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "If user spoke fluently and finished thought: respond warmly and ask one simple follow-up",
+          "result": "PARTIAL",
+          "reason": "The AI responded warmly but sometimes asked more complex follow-ups, as seen in Turn 3.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "global"
+        },
+        {
+          "rule": "If user trailed off: prompt to finish that thought",
+          "result": "PASS",
+          "reason": "In Turn 1, the AI prompted the user to finish their thought about young people.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "If user used many fillers: note it once gently then move on — never block progress",
+          "result": "PASS",
+          "reason": "There is no instance where the user used many fillers, so the AI did not need to address this.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "If user lost their thread: ask where they were going with that",
+          "result": "PASS",
+          "reason": "In Turn 1, the AI asked the user to clarify their point about young people, indicating they were on the right track.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Never make the user feel wrong or stuck",
+          "result": "PASS",
+          "reason": "The AI maintained a supportive tone and encouraged the user to continue their thoughts without criticism.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Never block the user from continuing",
+          "result": "PASS",
+          "reason": "The AI consistently allowed the user to continue speaking and developing their thoughts.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Content check: only check if user is on topic",
+          "result": "PASS",
+          "reason": "The AI did not divert from the topic of social media's impact and kept the conversation on track.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Any on-topic point is acceptable — simple or complex, strong or weak",
+          "result": "PASS",
+          "reason": "The AI accepted all the user's points without judgment, regardless of their strength or complexity.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Only call out content if completely off-topic",
+          "result": "PASS",
+          "reason": "Since the user remained on topic, the AI did not need to call out any off-topic content.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Never ask user to be more specific about content in Level 1",
+          "result": "FAIL",
+          "reason": "In Turn 5, the AI asked the user to clarify what they meant by engagement, which is asking for specificity.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Tone: warm debate partner, firm but never harsh",
+          "result": "PASS",
+          "reason": "The AI maintained a warm and engaging tone throughout the conversation, encouraging debate without harshness.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must encourage user to use simple English",
+          "result": "PARTIAL",
+          "reason": "While the AI's responses were generally clear, there was no explicit encouragement for the user to use simple English.",
+          "eval_type": "llm",
+          "confidence": 0.7,
+          "category": "global"
+        },
+        {
+          "rule": "Sound like a real person not a robot",
+          "result": "PASS",
+          "reason": "The AI's responses were phrased in a way that mimicked human conversation, avoiding robotic tone.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "global"
+        },
+        {
+          "rule": "Anti-sycophancy: never validate just because user repeated point more confidently",
+          "result": "PASS",
+          "reason": "The AI did not simply validate the user's points based on confidence but instead engaged with the content of their arguments.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "If user changed position without reasoning — call it out",
+          "result": "PARTIAL",
+          "reason": "The AI noticed the user's shift in argument in Turn 3 but did not explicitly call out the lack of reasoning for the change in position.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "global"
+        },
+        {
+          "rule": "Never let a communication weakness pass because user seems frustrated or tired",
+          "result": "PASS",
+          "reason": "The AI consistently addressed and clarified the user's points throughout the conversation, not letting any weaknesses pass, as seen in Turn 4 where it asked for clarification.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "global"
+        },
+        {
+          "rule": "70/30 rule: 70% communication quality, 30% content relevance",
+          "result": "PASS",
+          "reason": "The AI maintained a high level of communication quality by continuously asking for clarification and engaging with the user's arguments, while also touching on relevant content points, as observed across all turns.",
+          "eval_type": "llm",
+          "confidence": 0.95,
+          "category": "global"
+        },
+        {
+          "rule": "Turn 8+: let user wrap up — ban DEVILS_ADVOCATE, ASK_FOR_EVIDENCE, SHARP_FOLLOWUP",
+          "result": "SKIP",
+          "reason": "Strategy enforcement is server-internal. Cannot verify from conversation transcript.",
+          "eval_type": "deterministic",
+          "confidence": 0.0,
+          "category": "escalation"
+        },
+        {
+          "rule": "Turn 1-2: keep it very light",
+          "result": "PASS",
+          "reason": "The AI's responses in turns 1 and 2 were gentle and inquiring, such as 'I'm not convinced' and 'that makes sense to me', which kept the tone very light.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "escalation"
+        },
+        {
+          "rule": "Turn 3+: slightly more engaged but still gentle",
+          "result": "PARTIAL",
+          "reason": "While the AI's responses in turns 4 and 5 showed slightly more engagement, such as asking for clarification, they could be seen as slightly more probing than gentle, particularly in turn 4 with 'I'm not sure what you're actually saying'.",
+          "eval_type": "llm",
+          "confidence": 0.7,
+          "category": "escalation"
+        },
+        {
+          "rule": "Difficulty increases gradually turn by turn",
+          "result": "PARTIAL",
+          "reason": "The difficulty did increase from turns 1-2 to turns 4-5, as seen in the AI's more specific questions, but the increase was not uniformly gradual across all turns, with turn 4 seeming to ask for a significant clarification that might be considered a larger step in difficulty.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "escalation"
+        },
+        {
+          "rule": "OVERALL VERDICT must never start with 'hesitant and unclear'",
+          "result": "PASS",
+          "reason": "Feedback does not contain 'hesitant and unclear'.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never say 'hesitant and unclear communicator'",
+          "result": "PASS",
+          "reason": "Feedback does not contain 'hesitant and unclear communicator'.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never say 'struggles to convey'",
+          "result": "PASS",
+          "reason": "Feedback does not contain 'struggles to convey'.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never say 'lacks conviction'",
+          "result": "PASS",
+          "reason": "Feedback does not contain 'lacks conviction'.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never use language implying fundamental failure",
+          "result": "PASS",
+          "reason": "No failure language detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never evaluate factual accuracy",
+          "result": "PASS",
+          "reason": "No factual evaluation detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never demand evidence or data",
+          "result": "PASS",
+          "reason": "No evidence demands detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must not contain invented statistics or research references",
+          "result": "PASS",
+          "reason": "No invented statistics found.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Each fix must follow four-part structure: POINT, REASON, EXAMPLE, TRY THIS INSTEAD",
+          "result": "PASS",
+          "reason": "Four-part structure detected (4/4 markers found).",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback harshness: 3 out of 10",
+          "result": "PASS",
+          "reason": "The feedback report maintains a gentle and supportive tone, aligning with a harshness level of 3 out of 10.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "Be honest but never crushing",
+          "result": "PASS",
+          "reason": "The report provides honest feedback without being overly critical or discouraging, as seen in the 'OVERALL VERDICT' and 'SPOKEN SUMMARY' sections.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "feedback"
+        },
+        {
+          "rule": "OVERALL VERDICT must acknowledge effort and identify one main thing to work on",
+          "result": "PASS",
+          "reason": "The 'OVERALL VERDICT' acknowledges the speaker as 'a developing communicator with notable effort' and implies the need to work on confidence.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "WHAT WORKED must find at least 1-2 genuine communication positives — even small things count",
+          "result": "PASS",
+          "reason": "The 'WHAT WORKED' section highlights two positive aspects of the speaker's communication, including clarity and a clear position.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must be simple and achievable",
+          "result": "PASS",
+          "reason": "The suggested fixes, such as reducing hedging signals and practicing without fillers, are straightforward and attainable.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must all be communication-based — never about content strength",
+          "result": "PASS",
+          "reason": "All three points to fix focus on communication aspects, such as confidence, clarity, and fluency, rather than the strength of the arguments.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "ONE EARNED ENCOURAGEMENT is mandatory — must be specific and real",
+          "result": "PASS",
+          "reason": "The 'ONE EARNED ENCOURAGEMENT' section provides a specific and genuine compliment on the speaker's clear and direct communication of their point.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+          "result": "PASS",
+          "reason": "All three points to fix are communication fixes, focusing on reducing hedging signals, lack of clear position, and inconsistent filler use.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        }
+      ],
+      "turn_data": [
+        {
+          "turn": 1,
+          "user_input": "Social media does more harm than good because it damages mental health and spreads misinformation among young people.",
+          "transcript": "Social media does more harm than good because it damages mental health and spreads misinformation. Among young people,",
+          "ai_response": "I'm not convinced that social media is the main culprit when it comes to damaging mental health among young people. You said it spreads misinformation, but don't you think that's also a problem with traditional media, and social media can actually help spread correct information too? Where were you going with that point about young people, can you finish that thought?",
+          "is_interrupt": false,
+          "wpm": 128,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 2,
+          "user_input": "I think maybe social media is kind of bad for young people you know because of the comparisons and anxiety.",
+          "transcript": "I think maybe social media is kind of bad for young people you know because of the comparisons in anxiety.",
+          "ai_response": "You mentioned comparisons and anxiety, that makes sense to me. But don't you think young people have always made comparisons, even before social media, like with friends or celebrities on TV? What is it about social media that you think makes these comparisons particularly harmful?",
+          "is_interrupt": false,
+          "wpm": 149,
+          "fillers": 3,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 3,
+          "user_input": "You are right, social media does have some benefits.",
+          "transcript": "You are right, social media does have some benefits.",
+          "ai_response": "That's an interesting shift, you were arguing that social media does more harm than good, but now you're acknowledging some benefits. What makes you still believe that the harm outweighs the good, despite these benefits? Can you help me understand why you're not convinced that social media can be a net positive?",
+          "is_interrupt": false,
+          "wpm": 135,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 4,
+          "user_input": "The main problem is that algorithms are designed to keep people addicted and this causes harm.",
+          "transcript": "The main problem is that algorithms are designed to keep people addicted and this causes harm.",
+          "ai_response": "I heard your words, but I'm not sure what you're actually saying about algorithms and addiction. Can you restate it more clearly, like what exactly do you mean by harm caused by addiction to social media? You started talking about addiction, but I didn't quite follow how that connects to your main point.",
+          "is_interrupt": false,
+          "wpm": 145,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 5,
+          "user_input": "I mean I think the issue is also about how platforms earn money through engagement.",
+          "transcript": "I mean I think the issue is also about how platforms earn money through engagement.",
+          "ai_response": "So you're saying that platforms earn money through engagement, but what exactly do you mean by engagement - is it just about people spending more time on the platform, or is there something more to it? You mentioned earlier that algorithms are designed to keep people addicted, how does that relate to platforms earning money through engagement? Can you clarify that connection for me?",
+          "is_interrupt": false,
+          "wpm": 145,
+          "fillers": 2,
+          "just_did_redo": false,
+          "error": null
+        }
+      ],
+      "feedback_received": {
+        "full_report": "OVERALL VERDICT\nThey are a developing communicator with notable effort in their speaking session.\n\nWHAT WORKED\nTheir statement \"Social media does more harm than good because it damages mental health and spreads misinformation\" showed clarity, and \"The main problem is that algorithms are designed to keep people addicted and this causes harm\" demonstrated a clear position.\n\nTHE MAIN PROBLEM\nTheir use of \"I think\" and \"maybe\" frequently, such as in \"I think maybe social media is kind of bad for young people you know,\" indicates a lack of confidence in their delivery.\n\nTHE PATTERN\nAcross turns 1, 2, and 5, they used hedging signals like \"I think\" and \"I mean,\" which can make their message less direct and less convincing to a real listener, as seen in \"I mean I think the issue is also about how platforms earn money through engagement.\"\n\nCONFIDENCE REPORT\nTotal hedging signals found: 6. Top 2 most frequent signals: \"I think\" and \"maybe.\" The single worst moment: \"I think maybe social media is kind of bad for young people you know,\" which signals uncertainty to a real listener.\n\nTHREE THINGS TO FIX\n1. POINT: Frequent use of hedging signals undermines confidence. REASON: It makes the listener question the speaker's certainty. EXAMPLE: \"I think maybe social media is kind of bad for young people you know.\" TRY THIS INSTEAD: \"Social media can be bad for young people due to comparisons and anxiety.\"\n2. POINT: Lack of clear position in some turns. REASON: It confuses the listener about the speaker's stance. EXAMPLE: \"You are right, social media does have some benefits.\" TRY THIS INSTEAD: \"While social media has benefits, its harms outweigh them.\"\n3. POINT: Inconsistent filler use. REASON: It disrupts the flow of the message. EXAMPLE: Turn 2 with 3 fillers. TRY THIS INSTEAD: Practice speaking without fillers to improve fluency.\n\nONE EARNED ENCOURAGEMENT\nTheir statement \"The main problem is that algorithms are designed to keep people addicted and this causes harm\" showed a clear and direct communication of their point.\n\nSPOKEN SUMMARY\nYou're working on your confidence, and one key fix is to reduce hedging signals like \"I think\" to sound more direct. Try practicing without fillers for better fluency. Keep developing your communication skills.",
+        "spoken_summary": "You're working on your confidence, and one key fix is to reduce hedging signals like \"I think\" to sound more direct. Try practicing without fillers for better fluency. Keep developing your communication skills.",
+        "total_turns": 5,
+        "avg_wpm": 140.4,
+        "avg_fillers": 1.0,
+        "total_fillers": 5,
+        "total_confidence_signals": 6,
+        "mode": "debate1",
+        "topic": "Social media does more harm than good",
+        "level": 1
+      },
+      "avg_confidence": 0.915
+    },
+    {
+      "scenario": "Weird Situation",
+      "mode": "weird",
+      "level": 0,
+      "topic": "A man in a full business suit swimming in a public fountain",
+      "rule_evaluations": [
+        {
+          "rule": "AI must ask ONE specific follow-up question about something the user mentioned",
+          "result": "PASS",
+          "reason": "Exactly one question per turn in all responses.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI response must be 1-2 sentences",
+          "result": "PASS",
+          "reason": "All responses were 1-2 sentences.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never use banned phrases: great point / excellent / well argued / good point / well done / interesting",
+          "result": "FAIL",
+          "reason": "Banned phrases used: Turn 1: 'interesting'; Turn 4: 'interesting'",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must vary sentence starter every turn",
+          "result": "FAIL",
+          "reason": "Repeated starters: Turn 2: repeated starter 'that's'; Turn 3: repeated starter 'that's'; Turn 4: repeated starter 'that's'",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct grammar or vocabulary",
+          "result": "PASS",
+          "reason": "No grammar corrections detected in AI responses.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never correct Indian English expressions",
+          "result": "PASS",
+          "reason": "No Indian English corrections detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never ask for data, statistics, evidence, or research",
+          "result": "PASS",
+          "reason": "No evidence demands detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "AI must respond in simple clear English",
+          "result": "PASS",
+          "reason": "Responses use simple English.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "global"
+        },
+        {
+          "rule": "Follow-up must connect to what user actually said — not a generic question",
+          "result": "PASS",
+          "reason": "The AI's follow-up questions in turns 1-5 directly connected to the user's previous statements, showing a clear understanding of the conversation context.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must react curiously and playfully to what user said",
+          "result": "PASS",
+          "reason": "The AI's responses, such as 'That's a really interesting observation' and 'That's a fun idea', demonstrated a curious and playful tone throughout the conversation.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Conversation should feel like two people exploring something strange together",
+          "result": "PASS",
+          "reason": "The conversation flowed naturally, with the AI and user collaboratively exploring the unusual scenario of a man in a suit in a fountain, as seen in turns 1-5.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never evaluate content quality",
+          "result": "PASS",
+          "reason": "The AI did not provide any feedback that could be interpreted as evaluating the quality of the user's contributions, focusing instead on exploring the ideas presented.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must never challenge the user's interpretation",
+          "result": "PASS",
+          "reason": "The AI accepted the user's interpretations without challenge, as seen in turn 2 where it built upon the idea of the man celebrating a promotion without questioning its validity.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Goal is spontaneous speech — anything goes",
+          "result": "PASS",
+          "reason": "The conversation allowed for a wide range of ideas and directions, such as discussing the man's possible reasons for being in the fountain, without constraining the user to a specific topic.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "No correct answer — no topic to stay on",
+          "result": "PASS",
+          "reason": "The conversation did not imply there was a correct answer or a specific topic that needed to be adhered to, allowing for free-flowing discussion.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "Tone must be curious and playful",
+          "result": "PASS",
+          "reason": "The AI maintained a curious and playful tone throughout, as evidenced by questions like 'What kind of promotion or personal victory do you think would be worth risking getting a fancy suit completely soaked'.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "AI must sound like a real person not a robot",
+          "result": "PASS",
+          "reason": "The AI's language and questioning style, such as 'That's a fun idea' and 'What kind of colleagues do you think would come up with a bet that involves swimming in a fountain in a business suit', sounded natural and akin to human conversation.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "global"
+        },
+        {
+          "rule": "ONE EARNED ENCOURAGEMENT is mandatory",
+          "result": "PASS",
+          "reason": "Feedback contains an encouragement section.",
+          "eval_type": "deterministic",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback must never evaluate factual accuracy",
+          "result": "PASS",
+          "reason": "No factual evaluation detected.",
+          "eval_type": "pattern",
+          "confidence": 0.85,
+          "category": "feedback"
+        },
+        {
+          "rule": "Feedback harshness is 2 out of 10",
+          "result": "PASS",
+          "reason": "The feedback provided is gentle and constructive, indicating a low harshness level.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "OVERALL VERDICT must be positive or neutral only",
+          "result": "PASS",
+          "reason": "The overall verdict describes the communicator as 'relaxed and casual', which is a positive description.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "WHAT WORKED must find at least 2 genuine things",
+          "result": "PASS",
+          "reason": "The feedback highlights the communicator's fluency and confidence as positive aspects.",
+          "eval_type": "llm",
+          "confidence": 1.0,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+          "result": "PASS",
+          "reason": "The suggested fixes, such as removing filler words and using clearer transitions, are straightforward and kindly presented.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+          "result": "PARTIAL",
+          "reason": "While most fixes focus on fluency and flow, the mention of 'variable pace' indirectly touches upon content delivery, which is related to but not exclusively about fluency and flow.",
+          "eval_type": "llm",
+          "confidence": 0.8,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+          "result": "FAIL",
+          "reason": "The feedback mentions 'filler words' and 'transitions', which are about form, but also implies content in 'variable pace', however the main focus is on form.",
+          "eval_type": "llm",
+          "confidence": 0.7,
+          "category": "feedback"
+        },
+        {
+          "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+          "result": "PASS",
+          "reason": "At least two of the suggested fixes, such as removing filler words and using clearer transitions, are directly related to improving communication.",
+          "eval_type": "llm",
+          "confidence": 0.9,
+          "category": "feedback"
+        }
+      ],
+      "turn_data": [
+        {
+          "turn": 1,
+          "user_input": "This man in the suit looks completely unbothered and confident like he owns the fountain.",
+          "transcript": "This man in the suit looks completely unbothered and confident like he owns the fountain.",
+          "ai_response": "That's a really interesting observation about him looking unbothered. What do you think would happen if someone else in a suit tried to join him in the fountain, would he still own the space or would it change the dynamic?",
+          "is_interrupt": false,
+          "wpm": 143,
+          "fillers": 1,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 2,
+          "user_input": "I think he is celebrating a promotion or some major personal victory.",
+          "transcript": "I think he is celebrating a promotion or some major personal victory.",
+          "ai_response": "That's a fun idea that he's celebrating something big. What kind of promotion or personal victory do you think would be worth risking getting a fancy suit completely soaked in a public fountain?",
+          "is_interrupt": false,
+          "wpm": 133,
+          "fillers": 1,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 3,
+          "user_input": "Maybe he made a bet with his colleagues and had to do this as a dare.",
+          "transcript": "Maybe he made a bet with his colleagues and had to do this as a dare.",
+          "ai_response": "That's an entertaining idea about a dare from his colleagues. What kind of colleagues do you think would come up with a bet that involves swimming in a fountain in a business suit?",
+          "is_interrupt": false,
+          "wpm": 198,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 4,
+          "user_input": "The people around him are probably shocked but also secretly impressed by his confidence.",
+          "transcript": "The people around him are probably shocked but also secretly impressed by his confidence.",
+          "ai_response": "That's an interesting observation about the people around him being secretly impressed. Do you think the fact that he's doing something so unconventional in a business suit makes his confidence seem more authentic or just plain crazy?",
+          "is_interrupt": false,
+          "wpm": 128,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        },
+        {
+          "turn": 5,
+          "user_input": "I would be too embarrassed to do this myself but I admire his attitude completely.",
+          "transcript": "I would be too embarrassed to do this myself but I admire his attitude completely.",
+          "ai_response": "What is it about his attitude that you admire, is it the fact that he's willing to look silly in front of others or something else entirely?",
+          "is_interrupt": false,
+          "wpm": 146,
+          "fillers": 0,
+          "just_did_redo": false,
+          "error": null
+        }
+      ],
+      "feedback_received": {
+        "full_report": "OVERALL VERDICT\nThey are a relaxed and casual communicator.\n\nWHAT WORKED\nTheir fluency was notable, as seen in \"This man in the suit looks completely unbothered and confident like he owns the fountain.\" Additionally, their confidence shone through in \"I would be too embarrassed to do this myself but I admire his attitude completely.\"\n\nTHE MAIN PROBLEM\nTheir structure was sometimes unclear, as shown in \"Maybe he made a bet with his colleagues and had to do this as a dare,\" which disrupts the flow of their main point.\n\nTHE PATTERN\nAcross turns 1, 3, and 5, they used phrases that started with uncertainty, such as \"I think\" and \"Maybe\", which can make their message less direct. For example, in turn 3, \"Maybe he made a bet with his colleagues and had to do this as a dare\" makes the listener question the certainty of the statement.\n\nCONFIDENCE REPORT\nTotal hedging signals found: 2. Top 2 most frequent signals: \"I think\" and \"Maybe\". The single worst moment was \"Maybe he made a bet with his colleagues and had to do this as a dare,\" which signals uncertainty to the listener.\n\nTHREE THINGS TO FIX\nPOINT: Filler words disrupt fluency. REASON: This hurts the listener's ability to focus. EXAMPLE: \"This man in the suit looks completely unbothered and confident like he owns the fountain\" has a filler. TRY THIS INSTEAD: Remove the filler for a smoother delivery.\nPOINT: Unclear transitions between ideas. REASON: This confuses the listener. EXAMPLE: The jump from turn 2 to turn 3 is abrupt. TRY THIS INSTEAD: Use connecting words for a clearer flow.\nPOINT: Variable pace. REASON: This affects the listener's engagement. EXAMPLE: Turn 3's pace is much faster than turn 2's. TRY THIS INSTEAD: Maintain a consistent pace for better listener engagement.\n\nONE EARNED ENCOURAGEMENT\nTheir self-awareness and honesty in \"I would be too embarrassed to do this myself but I admire his attitude completely\" show genuine communication potential.\n\nSPOKEN SUMMARY\nYou spoke relaxedly, but sometimes your structure was unclear. Try using clearer transitions. You'll see improvement with practice.",
+        "spoken_summary": "You spoke relaxedly, but sometimes your structure was unclear. Try using clearer transitions. You'll see improvement with practice.",
+        "total_turns": 5,
+        "avg_wpm": 149.6,
+        "avg_fillers": 0.4,
+        "total_fillers": 2,
+        "total_confidence_signals": 2,
+        "mode": "weird",
+        "topic": "A man in a full business suit swimming in a public fountain",
+        "level": 0
+      },
+      "avg_confidence": 0.94
+    }
+  ],
+  "api_usage": {
+    "summary": {
+      "total_requests": 8,
+      "successful_requests": 8,
+      "failed_requests": 0,
+      "total_tokens_in": 7228,
+      "total_tokens_out": 4711,
+      "total_tokens": 11939,
+      "elapsed_seconds": 131.8,
+      "cost_estimate_usd": 0.0
+    },
+    "per_provider": {
+      "groq": {
+        "requests": 8,
+        "success": 8,
+        "failed": 0,
+        "tokens_in": 7228,
+        "tokens_out": 4711,
+        "avg_latency_ms": 1798.8,
+        "errors": []
+      }
+    },
+    "per_scenario": {
+      "FreeStyle — Random Word": {
+        "requests": 2,
+        "tokens_in": 1664,
+        "tokens_out": 1065
+      },
+      "Debate Level 1": {
+        "requests": 4,
+        "tokens_in": 3828,
+        "tokens_out": 2293
+      },
+      "Weird Situation": {
+        "requests": 2,
+        "tokens_in": 1736,
+        "tokens_out": 1353
+      }
+    },
+    "per_category": {
+      "global": {
+        "requests": 4,
+        "tokens_in": 3480,
+        "tokens_out": 2670
+      },
+      "feedback": {
+        "requests": 3,
+        "tokens_in": 2940,
+        "tokens_out": 1742
+      },
+      "escalation": {
+        "requests": 1,
+        "tokens_in": 808,
+        "tokens_out": 299
+      }
+    },
+    "records": [
+      {
+        "timestamp": 1780812224.2198381,
+        "provider": "groq",
+        "tokens_in": 665,
+        "tokens_out": 527,
+        "latency_ms": 1905.5,
+        "success": true,
+        "scenario": "FreeStyle — Random Word",
+        "category": "global",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812226.8024616,
+        "provider": "groq",
+        "tokens_in": 999,
+        "tokens_out": 538,
+        "latency_ms": 1575.1,
+        "success": true,
+        "scenario": "FreeStyle — Random Word",
+        "category": "feedback",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812269.985363,
+        "provider": "groq",
+        "tokens_in": 1094,
+        "tokens_out": 1062,
+        "latency_ms": 2568.7,
+        "success": true,
+        "scenario": "Debate Level 1",
+        "category": "global",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812270.9036703,
+        "provider": "groq",
+        "tokens_in": 918,
+        "tokens_out": 280,
+        "latency_ms": 918.3,
+        "success": true,
+        "scenario": "Debate Level 1",
+        "category": "global",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812273.5006437,
+        "provider": "groq",
+        "tokens_in": 808,
+        "tokens_out": 299,
+        "latency_ms": 1593.7,
+        "success": true,
+        "scenario": "Debate Level 1",
+        "category": "escalation",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812276.3691328,
+        "provider": "groq",
+        "tokens_in": 1008,
+        "tokens_out": 652,
+        "latency_ms": 1867.9,
+        "success": true,
+        "scenario": "Debate Level 1",
+        "category": "feedback",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812317.9465327,
+        "provider": "groq",
+        "tokens_in": 803,
+        "tokens_out": 801,
+        "latency_ms": 2212.7,
+        "success": true,
+        "scenario": "Weird Situation",
+        "category": "global",
+        "error": ""
+      },
+      {
+        "timestamp": 1780812320.6976738,
+        "provider": "groq",
+        "tokens_in": 933,
+        "tokens_out": 552,
+        "latency_ms": 1748.6,
+        "success": true,
+        "scenario": "Weird Situation",
+        "category": "feedback",
+        "error": ""
+      }
+    ]
+  },
+  "cache_stats": {
+    "cache_size": 58,
+    "hits": 0,
+    "misses": 58,
+    "hit_rate": 0.0
+  },
+  "quota_estimate": {
+    "server_llm_calls": 18,
+    "eval_llm_calls": 8,
+    "total_llm_calls": 26,
+    "deterministic_rules": 29,
+    "pattern_rules": 28,
+    "llm_rules": 58,
+    "total_rules": 115,
+    "estimated_tokens_in": 43000,
+    "estimated_tokens_out": 16200,
+    "estimated_cost_usd": 0.0,
+    "warnings": [],
+    "can_proceed": true
+  }
+}

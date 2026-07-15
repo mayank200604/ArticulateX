@@ -1,0 +1,930 @@
+{
+  "0da850810ca34436610dde4a793610e1a65d66d3771df19be845a8a43617a076": {
+    "rule": "AI must acknowledge what the user said briefly and genuinely",
+    "result": "PASS",
+    "reason": "The AI consistently acknowledged the user's statements with phrases like 'That's a really thoughtful way to describe resilience' and 'That's a beautiful perspective on resilience'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "ee17da8f1028aa9f83a5da96e1f33d7d659e8ec8c0118d403069453c956b7a5d": {
+    "rule": "AI must keep the user speaking comfortably",
+    "result": "PASS",
+    "reason": "The AI's responses, such as 'What's an example of a difficult situation where you felt like you bounced back strongly?' and 'Can you tell me about a time when you saw resilience make a difference at work or in someone's career?', encouraged the user to continue speaking.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "1f829683f702d6a12ff85c90130f41115fd664b1cdba863cc77a96449d934df4": {
+    "rule": "AI must be warm and genuinely curious in tone",
+    "result": "PASS",
+    "reason": "The AI maintained a warm and curious tone throughout the conversation, using phrases like 'That's really interesting' and 'I'd love to hear more'.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "9915f0c694a6431e95b693d2de22ef188266706177769748c6bec7dd8de42084": {
+    "rule": "AI must never challenge, correct, or evaluate content",
+    "result": "PASS",
+    "reason": "The AI never challenged or corrected the user's statements, instead focusing on exploring their thoughts and experiences with open-ended questions.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "1dee694a99ad5e081cf9aa74b4a2de26e73a8e55dc3158a9d672860df58824c9": {
+    "rule": "There is no right or wrong answer in freestyle",
+    "result": "PASS",
+    "reason": "The AI did not imply any right or wrong answers, instead allowing the user to freely express their thoughts and opinions.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "de32f08246c56590aeb5c9690712dd6cd098994caf14b2f20280d225427c8436": {
+    "rule": "AI must sound like a real person, not a robot",
+    "result": "PASS",
+    "reason": "The AI's language and responses, such as 'That's a really thoughtful way to describe resilience' and 'I'd love to hear more', sounded natural and similar to human conversation.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "3c1471c5b457bd835d2243d5adb2c47cfba7ad26643375c3c417f79a7c8855d5": {
+    "rule": "Feedback harshness is 2 out of 10",
+    "result": "PASS",
+    "reason": "The feedback provided is gentle and constructive, focusing on improvement rather than criticism.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "e61410387071d4d59884bb511c222727e25668a76a6cd4af3687f1fb04b750cb": {
+    "rule": "OVERALL VERDICT must be positive or neutral only",
+    "result": "PASS",
+    "reason": "The overall verdict describes the communicator as 'developing' with 'room for improvement', which is neutral.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "805bb478d488231b6f4690cdacbd0cbb323f8ac0732df653b4d9daf51c1cbb72": {
+    "rule": "WHAT WORKED must find at least 2 genuine things",
+    "result": "PASS",
+    "reason": "The feedback identifies two strengths: the ability to finish thoughts and the attempt to provide a personal experience.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "a4000502cbc05dae49f533b938b19a0b1c390d689f41dedc5d413d853f9b1ed3": {
+    "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+    "result": "PASS",
+    "reason": "The suggestions for improvement are straightforward, encouraging, and feasible for the communicator to work on.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "3aafe152c28c09697c5c44c62ec8f2bf4f89ab02897404865cde40c653c61b02": {
+    "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+    "result": "PARTIAL",
+    "reason": "While most suggestions focus on fluency and flow, one point indirectly touches on content by implying a clearer expression of resilience.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "feedback"
+  },
+  "2099f7a78084dc68f59b54b3c8cbf359e3d77f65cf1176eb54808bb1dc21d46d": {
+    "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+    "result": "PARTIAL",
+    "reason": "The feedback mostly avoids commenting on content quality but suggests rephrasing sentences in a way that could be interpreted as improving argument strength.",
+    "eval_type": "llm",
+    "confidence": 0.6,
+    "category": "feedback"
+  },
+  "355e392c08e39b09d68380b58f85fe101b641f2eb4a3504332fa3ee963d886a6": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "At least two of the suggestions (reducing filler words and improving pace) are directly related to communication fixes.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "882dfcf7a13bec715c59053426ab5603fe7fdcbf61e16837263973e921dc625c": {
+    "rule": "AI's job is to keep the user speaking — fluency is everything",
+    "result": "PASS",
+    "reason": "The AI consistently encouraged the user to continue speaking throughout the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "3aa2035b06b3f7783b8d34c025b65afc1979d7279ffd3ab859904e67fa34b549": {
+    "rule": "If user spoke fluently and finished thought: respond warmly and ask one simple follow-up",
+    "result": "PARTIAL",
+    "reason": "The AI responded warmly but sometimes asked more complex follow-ups, as seen in Turn 3.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "global"
+  },
+  "d1bdb7f9005ac3410c49f6a7327eb46dc165f06913fdb3265727fd9c018c9335": {
+    "rule": "If user trailed off: prompt to finish that thought",
+    "result": "PASS",
+    "reason": "In Turn 1, the AI prompted the user to finish their thought about young people.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "3a1fdd552c85a2845e6fd850903f286f3231e866614683290a41368206821f9a": {
+    "rule": "If user used many fillers: note it once gently then move on — never block progress",
+    "result": "PASS",
+    "reason": "There is no instance where the user used many fillers, so the AI did not need to address this.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "119a10e8d6681251c8663d3e705a11c581c2537edb06055cf178675c224124dc": {
+    "rule": "If user lost their thread: ask where they were going with that",
+    "result": "PASS",
+    "reason": "In Turn 1, the AI asked the user to clarify their point about young people, indicating they were on the right track.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "2d4e4bdad3e2212e48faf14f9fb58618b9e1121dcec934c46a7cb4e7f25e5b8d": {
+    "rule": "Never make the user feel wrong or stuck",
+    "result": "PASS",
+    "reason": "The AI maintained a supportive tone and encouraged the user to continue their thoughts without criticism.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "d8173d0e3f965a35955552c72788f930764913cbfc0e40fd100e47cbb8ddd256": {
+    "rule": "Never block the user from continuing",
+    "result": "PASS",
+    "reason": "The AI consistently allowed the user to continue speaking and developing their thoughts.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "a77e859b890d7f50dcb655b2ad2a05f5c96dae67740b8c0d8fe21be94b0f026d": {
+    "rule": "Content check: only check if user is on topic",
+    "result": "PASS",
+    "reason": "The AI did not divert from the topic of social media's impact and kept the conversation on track.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "2652488789576277479d16e456a8b50aa07b4c3e9d47d776a22eac1fe940e637": {
+    "rule": "Any on-topic point is acceptable — simple or complex, strong or weak",
+    "result": "PASS",
+    "reason": "The AI accepted all the user's points without judgment, regardless of their strength or complexity.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "c3a49dee307a553ea87cd61ab6809320b5789beabe182c4f759b9039592cf5bc": {
+    "rule": "Only call out content if completely off-topic",
+    "result": "PASS",
+    "reason": "Since the user remained on topic, the AI did not need to call out any off-topic content.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "85600c751d4c0efaf27d482dadec5d8f602bc930a8542d65501cab1cf6080c04": {
+    "rule": "Never ask user to be more specific about content in Level 1",
+    "result": "FAIL",
+    "reason": "In Turn 5, the AI asked the user to clarify what they meant by engagement, which is asking for specificity.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "8f841c474659a7cfd1e435f567ce99bc24951d02c827f3edd3ce21dec046830a": {
+    "rule": "Tone: warm debate partner, firm but never harsh",
+    "result": "PASS",
+    "reason": "The AI maintained a warm and engaging tone throughout the conversation, encouraging debate without harshness.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "ff83eb75115126ea177762a71c00c5bdd6e2967b6128ac5cdaf30b283cd52ee9": {
+    "rule": "AI must encourage user to use simple English",
+    "result": "PARTIAL",
+    "reason": "While the AI's responses were generally clear, there was no explicit encouragement for the user to use simple English.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "global"
+  },
+  "5f3b2a0098d5c594918d70308ae8a3a2a5b771137d8ee081ee24c65310af9360": {
+    "rule": "Sound like a real person not a robot",
+    "result": "PASS",
+    "reason": "The AI's responses were phrased in a way that mimicked human conversation, avoiding robotic tone.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "b98796b54cccaff8a70bc051c1e7c36a6e6a0affc30fd20ca1397c3bb7b6fb80": {
+    "rule": "Anti-sycophancy: never validate just because user repeated point more confidently",
+    "result": "PASS",
+    "reason": "The AI did not simply validate the user's points based on confidence but instead engaged with the content of their arguments.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "21f248bda154b77d752358ad1eab9fdcb0bd233699a8e4ce8a2ea6591bf2be5c": {
+    "rule": "If user changed position without reasoning — call it out",
+    "result": "PARTIAL",
+    "reason": "The AI noticed the user's shift in argument in Turn 3 but did not explicitly call out the lack of reasoning for the change in position.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "global"
+  },
+  "7773d95baa93d8ee1757d5ea9543b0968a72d08404144f8f015881a6570ceb35": {
+    "rule": "Never let a communication weakness pass because user seems frustrated or tired",
+    "result": "PASS",
+    "reason": "The AI consistently addressed and clarified the user's points throughout the conversation, not letting any weaknesses pass, as seen in Turn 4 where it asked for clarification.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "690801d7da3eb9c47530a05f96b74447bfd5f6a1f9d2b06d24779d46efd8e50b": {
+    "rule": "70/30 rule: 70% communication quality, 30% content relevance",
+    "result": "PASS",
+    "reason": "The AI maintained a high level of communication quality by continuously asking for clarification and engaging with the user's arguments, while also touching on relevant content points, as observed across all turns.",
+    "eval_type": "llm",
+    "confidence": 0.95,
+    "category": "global"
+  },
+  "b2c62ca3ba36d0603bdeb8b5b1c7641b10bd75cd81ad69a22340ce8296bfafc8": {
+    "rule": "Turn 1-2: keep it very light",
+    "result": "PASS",
+    "reason": "The AI's responses in turns 1 and 2 were gentle and inquiring, such as 'I'm not convinced' and 'that makes sense to me', which kept the tone very light.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "escalation"
+  },
+  "2b9ce25355929836e454e142e31a99d27371953009b72976336e10878dcbed96": {
+    "rule": "Turn 3+: slightly more engaged but still gentle",
+    "result": "PARTIAL",
+    "reason": "While the AI's responses in turns 4 and 5 showed slightly more engagement, such as asking for clarification, they could be seen as slightly more probing than gentle, particularly in turn 4 with 'I'm not sure what you're actually saying'.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "escalation"
+  },
+  "c5da835d208e9ed7c89a40215a79a9437d53288938614fa7ac3ae25f5afa3162": {
+    "rule": "Difficulty increases gradually turn by turn",
+    "result": "PARTIAL",
+    "reason": "The difficulty did increase from turns 1-2 to turns 4-5, as seen in the AI's more specific questions, but the increase was not uniformly gradual across all turns, with turn 4 seeming to ask for a significant clarification that might be considered a larger step in difficulty.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "escalation"
+  },
+  "3882cc7b51edc855f670b2af753e73e7d6c1b974ecd0e6eea6d9f671c31f5157": {
+    "rule": "Feedback harshness: 3 out of 10",
+    "result": "PASS",
+    "reason": "The feedback report maintains a gentle and supportive tone, aligning with a harshness level of 3 out of 10.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "f0d1b01bdc39f2cf81500f78b243d5e9e7f8891e47a4e3300312fca0435a25b6": {
+    "rule": "Be honest but never crushing",
+    "result": "PASS",
+    "reason": "The report provides honest feedback without being overly critical or discouraging, as seen in the 'OVERALL VERDICT' and 'SPOKEN SUMMARY' sections.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "cb45a8a927a31000026a3469f5118fe24a80258832f389fd17db211042fb3909": {
+    "rule": "OVERALL VERDICT must acknowledge effort and identify one main thing to work on",
+    "result": "PASS",
+    "reason": "The 'OVERALL VERDICT' acknowledges the speaker as 'a developing communicator with notable effort' and implies the need to work on confidence.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "8d562ed951c871656d5b56290ceefe7e33ed2d7849900278101ffb0cafe5b372": {
+    "rule": "WHAT WORKED must find at least 1-2 genuine communication positives — even small things count",
+    "result": "PASS",
+    "reason": "The 'WHAT WORKED' section highlights two positive aspects of the speaker's communication, including clarity and a clear position.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "e1a8af7711686bb74752d2eaee1576d5ae6ac5db70e418e3645ef6106e8217ee": {
+    "rule": "THREE THINGS TO FIX must be simple and achievable",
+    "result": "PASS",
+    "reason": "The suggested fixes, such as reducing hedging signals and practicing without fillers, are straightforward and attainable.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "70305e3cc6a556803b96cc4fb1b66e2f70d1a35599aa7c08ec729175c72b28db": {
+    "rule": "THREE THINGS TO FIX must all be communication-based — never about content strength",
+    "result": "PASS",
+    "reason": "All three points to fix focus on communication aspects, such as confidence, clarity, and fluency, rather than the strength of the arguments.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "40e7c41b1ce951bad2f2e3f323c28f825c5231d8157d85ba0fdc9ceae2aab99d": {
+    "rule": "ONE EARNED ENCOURAGEMENT is mandatory — must be specific and real",
+    "result": "PASS",
+    "reason": "The 'ONE EARNED ENCOURAGEMENT' section provides a specific and genuine compliment on the speaker's clear and direct communication of their point.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "1d8b0339f2804e24cfcbc3d322372e37aa6b580b156166cbf5f0b155bb527ef0": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "All three points to fix are communication fixes, focusing on reducing hedging signals, lack of clear position, and inconsistent filler use.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "a7f12d470d1f980f0c65387cd39a3cb2863362a3ed69aae0435bbf1f5a26ac0a": {
+    "rule": "Follow-up must connect to what user actually said — not a generic question",
+    "result": "PASS",
+    "reason": "The AI's follow-up questions in turns 1-5 directly connected to the user's previous statements, showing a clear understanding of the conversation context.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "bc5cf47698d3a69f0ca984ba2602c8737604b1d415c95808aa18a0ef8ac7811d": {
+    "rule": "AI must react curiously and playfully to what user said",
+    "result": "PASS",
+    "reason": "The AI's responses, such as 'That's a really interesting observation' and 'That's a fun idea', demonstrated a curious and playful tone throughout the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "e6eaa928403e9b15e4646be2cfcf070ba11268347a2f948fa120bee7c9c2246f": {
+    "rule": "Conversation should feel like two people exploring something strange together",
+    "result": "PASS",
+    "reason": "The conversation flowed naturally, with the AI and user collaboratively exploring the unusual scenario of a man in a suit in a fountain, as seen in turns 1-5.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "49ce3d15c61b638a41845803506dfee005c9f42a87b5abe386973b40aa181415": {
+    "rule": "AI must never evaluate content quality",
+    "result": "PASS",
+    "reason": "The AI did not provide any feedback that could be interpreted as evaluating the quality of the user's contributions, focusing instead on exploring the ideas presented.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "2c17d44ad7d970f88c15c1d06a741af2c293ccbe6d63b191e15f128ae3c5eeca": {
+    "rule": "AI must never challenge the user's interpretation",
+    "result": "PASS",
+    "reason": "The AI accepted the user's interpretations without challenge, as seen in turn 2 where it built upon the idea of the man celebrating a promotion without questioning its validity.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "38e22ce9ba0e45085ba8566b69ee9afb49c60e14fed55e4eaa25898cd1f3b03b": {
+    "rule": "Goal is spontaneous speech — anything goes",
+    "result": "PASS",
+    "reason": "The conversation allowed for a wide range of ideas and directions, such as discussing the man's possible reasons for being in the fountain, without constraining the user to a specific topic.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "777532eb83c1a4ad1ae9ca57ea521259ebff83b80f2f105f734af10999f50b2d": {
+    "rule": "No correct answer — no topic to stay on",
+    "result": "PASS",
+    "reason": "The conversation did not imply there was a correct answer or a specific topic that needed to be adhered to, allowing for free-flowing discussion.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "9d07034cd9dd0ffc17a5ac77770d7b3d167218e380ce0c8af478557d406899fa": {
+    "rule": "Tone must be curious and playful",
+    "result": "PASS",
+    "reason": "The AI maintained a curious and playful tone throughout, as evidenced by questions like 'What kind of promotion or personal victory do you think would be worth risking getting a fancy suit completely soaked'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "e092ef727d5d8735013084d856412c791cc85799be373dc9d47eca36e2043a79": {
+    "rule": "AI must sound like a real person not a robot",
+    "result": "PASS",
+    "reason": "The AI's language and questioning style, such as 'That's a fun idea' and 'What kind of colleagues do you think would come up with a bet that involves swimming in a fountain in a business suit', sounded natural and akin to human conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "5146cd426f14e39e907db6b8b519ffd38664ebeec5a5e38c54bb9303af9a01e8": {
+    "rule": "Feedback harshness is 2 out of 10",
+    "result": "PASS",
+    "reason": "The feedback provided is gentle and constructive, indicating a low harshness level.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "d77b5baba12eaffe88968d7b5fc3ded9d8e7c51a57ae083029367fba60a3c64d": {
+    "rule": "OVERALL VERDICT must be positive or neutral only",
+    "result": "PASS",
+    "reason": "The overall verdict describes the communicator as 'relaxed and casual', which is a positive description.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "eb2d6e1c2ed18e84333ab3ff666c848f669b8edb56a9b9c33124ef8111c60e6e": {
+    "rule": "WHAT WORKED must find at least 2 genuine things",
+    "result": "PASS",
+    "reason": "The feedback highlights the communicator's fluency and confidence as positive aspects.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "52db5cd1ff988f266140bd19915e1137d03286056c45176bc33bd1fffacc3af7": {
+    "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+    "result": "PASS",
+    "reason": "The suggested fixes, such as removing filler words and using clearer transitions, are straightforward and kindly presented.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "42a08cef7a22ea69920f1e35ad78d8fbb895ff0eaad2b49e834fc66006e08c50": {
+    "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+    "result": "PARTIAL",
+    "reason": "While most fixes focus on fluency and flow, the mention of 'variable pace' indirectly touches upon content delivery, which is related to but not exclusively about fluency and flow.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "4efe275d178e3a50db50fd849a6d242d6da0c5f0bc309b1a3e8f0f8ee15558b5": {
+    "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+    "result": "FAIL",
+    "reason": "The feedback mentions 'filler words' and 'transitions', which are about form, but also implies content in 'variable pace', however the main focus is on form.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "feedback"
+  },
+  "c68bf67791cc7ce5faf22d835ff5f0d6e83c8a0827f70b853b3743131a76ad01": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "At least two of the suggested fixes, such as removing filler words and using clearer transitions, are directly related to improving communication.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "faa83ce478b11ebed6f24f72cccbc24920708bd0870fcbc598ace8f5fdba2439": {
+    "rule": "AI must acknowledge what the user said briefly and genuinely",
+    "result": "PASS",
+    "reason": "The AI consistently acknowledged the user's statements with phrases like 'That's a really thoughtful way to describe resilience' and 'That's a beautiful perspective on resilience'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "af684e96b9686e184babc35b693b2aa0297bd29d6a8a305471ff5a61d97f6928": {
+    "rule": "AI must keep the user speaking comfortably",
+    "result": "PASS",
+    "reason": "The AI's responses, such as 'What's an example of a time when you felt like you bounced back from a difficult situation?', encouraged the user to continue sharing their thoughts.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "9ad2590ab257e21e031b3287d6e5e66917e2e3eeb8be84095c499ea87af9259b": {
+    "rule": "AI must be warm and genuinely curious in tone",
+    "result": "PASS",
+    "reason": "The AI maintained a warm and curious tone throughout the conversation, using phrases like 'That's a really interesting point' and 'What was going through your mind when you decided to start over from the beginning?'.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "41392c1a921f2016c2fda91dcc96c10c366e6040480d8c5af3a3cea84686f12f": {
+    "rule": "AI must never challenge, correct, or evaluate content",
+    "result": "PASS",
+    "reason": "The AI never challenged or corrected the user's statements, instead focusing on exploring their thoughts and experiences with open-ended questions.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "27707673c4d8259ac8dd737d47231ac05632771b5d9ce4e857f7a49690bb5522": {
+    "rule": "There is no right or wrong answer in freestyle",
+    "result": "PASS",
+    "reason": "The AI did not imply any right or wrong answers, instead embracing the user's diverse perspectives on resilience.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "533e1949053a2a05a90b0c32560b2533687cb235779f3b05a0f0c9f1eb9ab78b": {
+    "rule": "AI must sound like a real person, not a robot",
+    "result": "PASS",
+    "reason": "The AI's language and responses, such as 'That's a really thoughtful way to describe resilience', sounded natural and similar to human conversation.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "global"
+  },
+  "67cb63e0cfd3aebf27c5a94ffa0855a9454323be1c515b837450da3c667d58d2": {
+    "rule": "Feedback harshness is 2 out of 10",
+    "result": "PASS",
+    "reason": "The feedback provided is gentle and constructive, focusing on improvement rather than criticism.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "d8f5caf9487bc778665fa6fe345da926d3d862796eafe77c1d57a6e2af71f82c": {
+    "rule": "OVERALL VERDICT must be positive or neutral only",
+    "result": "PASS",
+    "reason": "The overall verdict describes the communicator as 'developing' with 'room for improvement', which is neutral.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "f95c8695a809acfc7d85bb0b913d905230620418528ee411c231c4404137ace9": {
+    "rule": "WHAT WORKED must find at least 2 genuine things",
+    "result": "PASS",
+    "reason": "The feedback identifies two strengths: the ability to finish thoughts and the attempt to provide a personal experience.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "f7d926b82f6aabb50d8cca040caaf2866b00d222e0a7361abb2285b93e5e1208": {
+    "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+    "result": "PASS",
+    "reason": "The suggestions for improvement are straightforward, encouraging, and feasible for the communicator to work on.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "f676f802addfb1d01a5dc7b9c2ade92561f3c7f0ec716d45a5968978fec9e132": {
+    "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+    "result": "PARTIAL",
+    "reason": "While most suggestions focus on fluency and flow, such as reducing filler words and improving pace, one suggestion touches upon confidence, which is related but slightly broader than just fluency and flow.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "3a131510375410fc046c33d439b70a2336bd8285ca59386f8045b9568a8fa746": {
+    "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+    "result": "PASS",
+    "reason": "The suggestions for improvement do not critique the content or argument strength, focusing instead on delivery aspects like filler words and pace.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "bc8a0842aa70933e737c5607e2f36e28851422303f832342223044f42763aea9": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "All three suggestions (reducing filler words, speaking more confidently, and improving pace) are directly related to communication fixes.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "a08f02760c4ee26ac4415b79d85017de75773c9ba2839842a1f4b82e8bd31a42": {
+    "rule": "AI's job is to keep the user speaking — fluency is everything",
+    "result": "PASS",
+    "reason": "The AI consistently responded in a way that encouraged the user to continue speaking throughout the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "a76a977b7e8bc66aa4d7514ac50cbc2e6584c47b40f827ddf843f97a245b8c7e": {
+    "rule": "If user spoke fluently and finished thought: respond warmly and ask one simple follow-up",
+    "result": "PASS",
+    "reason": "In Turn 1, the AI responded warmly and asked a simple follow-up question after the user finished their thought.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "8dfe1efd73d4bc08b7930f52228c883329b849acba0c97f41adfb3731f1a13c4": {
+    "rule": "If user trailed off: prompt to finish that thought",
+    "result": "PARTIAL",
+    "reason": "The AI did not have an opportunity to prompt the user to finish a trailed-off thought in the provided conversation transcript.",
+    "eval_type": "llm",
+    "confidence": 0.5,
+    "category": "global"
+  },
+  "77ca468fa59cde44c37e38678b0f5db84f62bc7dfd3cddcde885ed4766051224": {
+    "rule": "If user used many fillers: note it once gently then move on — never block progress",
+    "result": "PARTIAL",
+    "reason": "The AI did not have an opportunity to address the user's use of fillers in the provided conversation transcript.",
+    "eval_type": "llm",
+    "confidence": 0.5,
+    "category": "global"
+  },
+  "166cb6668aced7923befae7e91198c8a135b7246d231789dedbb8403e6d3a600": {
+    "rule": "If user lost their thread: ask where they were going with that",
+    "result": "PARTIAL",
+    "reason": "In Turn 4, the AI asked for clarification when the user's point was unclear, but it's not a clear example of the user losing their thread.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "global"
+  },
+  "dce93a28810693186512002604d7214f594b6058146c7d9867bf7dd8571a251e": {
+    "rule": "Never make the user feel wrong or stuck",
+    "result": "PASS",
+    "reason": "The AI's responses were phrased as curious questions, avoiding any language that might make the user feel wrong or stuck.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "36741172b4dda23007962dc86c67ccd2600710ddfe4d0a23279922b1f8ea6a7f": {
+    "rule": "Never block the user from continuing",
+    "result": "PASS",
+    "reason": "The AI's responses consistently allowed the user to continue speaking and developing their thoughts.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "afc2acba1313ff339a3dc8d7edd52337bd16932ccc3b0a8fe9fb824f05702c6e": {
+    "rule": "Content check: only check if user is on topic",
+    "result": "PASS",
+    "reason": "The AI did not challenge the user's content unless it was necessary to understand their point, staying on topic throughout the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "b987ba7f2a746b2071dc7d2589a7b5759a0c3c5f3dc68ec562b6e0147f41ccfc": {
+    "rule": "Any on-topic point is acceptable — simple or complex, strong or weak",
+    "result": "PASS",
+    "reason": "The AI accepted and responded to the user's points without judging their strength or complexity.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "d00e0b55584e6165892babef30325e0df7acb7ae898925f0c06be456a0d52f44": {
+    "rule": "Only call out content if completely off-topic",
+    "result": "PASS",
+    "reason": "The AI did not call out the user's content unless it was necessary to understand their point, and the conversation remained on topic.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "aed534b08081f283d8bafe11488951274bceaa9d00f68c2a8927d03ee6461b01": {
+    "rule": "Never ask user to be more specific about content in Level 1",
+    "result": "FAIL",
+    "reason": "In Turn 4 and Turn 5, the AI asked the user to clarify or restate their points, which could be seen as asking for more specificity.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "ad0ef55060aa72db9aee4f34d9c9c301454706fc522ae30f66eba70028083c87": {
+    "rule": "Tone: warm debate partner, firm but never harsh",
+    "result": "PASS",
+    "reason": "The AI maintained a warm and curious tone throughout the conversation, while still encouraging the user to think critically about their points.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "852741a4811a8f09e58b3bfc9a936d29115c502681443d457bd4ef3c4807dac6": {
+    "rule": "AI must encourage user to use simple English",
+    "result": "PARTIAL",
+    "reason": "While the AI's responses were clear and simple, there was no explicit encouragement for the user to use simple English.",
+    "eval_type": "llm",
+    "confidence": 0.6,
+    "category": "global"
+  },
+  "a8553c5f61f1de1f175f2d8312491390f9f8afa530a194bfcd7fbd5f1e019e86": {
+    "rule": "Sound like a real person not a robot",
+    "result": "PASS",
+    "reason": "The AI's responses were phrased in a natural, conversational way, avoiding robotic or overly formal language.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "d9ada39029738e3fa1af62b47c452c0e01f47ca11f80f3504987ef36da5bbd4e": {
+    "rule": "Anti-sycophancy: never validate just because user repeated point more confidently",
+    "result": "PASS",
+    "reason": "The AI did not simply validate the user's points, instead responding with thoughtful questions and encouraging further discussion.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "335d369401ff0bfd8b1a74c7581b994e701bf9aaa5956287d4086947f208775e": {
+    "rule": "If user changed position without reasoning — call it out",
+    "result": "PARTIAL",
+    "reason": "The AI noticed the user's shift in perspective in Turn 3 but did not explicitly ask for reasoning behind the change, instead choosing to explore the new perspective.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "global"
+  },
+  "fb20f365048c5f40debebbc94ff6d9195d750dbde0c27c4566916ee8512a009c": {
+    "rule": "Never let a communication weakness pass because user seems frustrated or tired",
+    "result": "PASS",
+    "reason": "The AI consistently addressed the user's statements and asked for clarification when necessary, without appearing to let potential frustration or tiredness influence its responses.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "global"
+  },
+  "1d9538e6c688d00f7f0e5c5dfc21bbf9b6794de6f98eccfcb5681306a6e738d8": {
+    "rule": "70/30 rule: 70% communication quality, 30% content relevance",
+    "result": "PASS",
+    "reason": "The AI's responses focused primarily on improving communication quality by seeking clarification and exploring the user's thoughts, while also touching on content relevance by discussing the potential benefits and harms of social media.",
+    "eval_type": "llm",
+    "confidence": 0.85,
+    "category": "global"
+  },
+  "ddd417e8038be6ca92a186e7e1d41ce36f488824a262081bbbb2b6ad2fbbac24": {
+    "rule": "Turn 1-2: keep it very light",
+    "result": "PASS",
+    "reason": "The AI's responses in turns 1 and 2 were gentle and inquiring, such as asking the user to 'explain how you think the harm outweighs the potential benefits' and 'tell me more about what you mean by comparisons'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "escalation"
+  },
+  "02bccf8b87db4eb911d31196aa5b336e9c0058b4fa8f2abf86677b09e2097035": {
+    "rule": "Turn 3+: slightly more engaged but still gentle",
+    "result": "PARTIAL",
+    "reason": "While the AI's responses in turns 4 and 5 were still relatively gentle, they could be seen as slightly more probing, but the tone remained mostly consistent with earlier turns, as seen in turn 4 where the AI asked the user to 'restate it more clearly'.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "escalation"
+  },
+  "d059043580461c3cae79252b368cbb64074918817a38abb62b96ecb458023763": {
+    "rule": "Difficulty increases gradually turn by turn",
+    "result": "FAIL",
+    "reason": "The difficulty of the AI's questions did not increase noticeably from turn 1 to turn 5, with similar types of clarifying questions being asked throughout, such as 'can you explain' and 'can you help me understand'.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "escalation"
+  },
+  "9d639244e8acf20e76cc9304dc7f0ad594f9bc80e6aaea545e52439f02183941": {
+    "rule": "Feedback harshness: 3 out of 10",
+    "result": "PASS",
+    "reason": "The feedback provided is constructive and gentle, with a harshness level that seems to align with the specified threshold.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "b725f407ecc47bd6ef06b2d209cc7e9a93b895209851dacad5c414211ce2d6a5": {
+    "rule": "Be honest but never crushing",
+    "result": "PASS",
+    "reason": "The feedback is honest about areas for improvement but is delivered in a supportive and non-crushing manner.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "50d8293753b5dbddc16eb9f3357950ce6278f79273f831e08ae1d8b7c2e69e1a": {
+    "rule": "OVERALL VERDICT must acknowledge effort and identify one main thing to work on",
+    "result": "PASS",
+    "reason": "The overall verdict acknowledges the communicator's development and notes the need for improvement in delivery, specifically confidence and clarity.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "cc505a755cc50e35e0911ee7420fdc4b09b54ef59a32a53a0cd80a7237cd66cb": {
+    "rule": "WHAT WORKED must find at least 1-2 genuine communication positives — even small things count",
+    "result": "PASS",
+    "reason": "The 'WHAT WORKED' section highlights specific positive aspects of the communicator's performance, such as a clear and direct claim and a specific point.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "521af3cd32e2592a15ae40ce5392f383dbef6668a4699de7861e5bf427c8e82a": {
+    "rule": "THREE THINGS TO FIX must be simple and achievable",
+    "result": "PASS",
+    "reason": "The suggested improvements, such as reducing filler words, establishing a clear structure, and avoiding contradictions, are straightforward and achievable.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "d655398b33ffbcee09eaaa88556a9a0dab421f32e1e417c96bcc5e9164865042": {
+    "rule": "THREE THINGS TO FIX must all be communication-based — never about content strength",
+    "result": "PASS",
+    "reason": "All the suggested improvements focus on communication aspects, such as clarity, structure, and confidence, rather than the strength of the arguments themselves.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "24c41495ecd94e0255d036ea8d1cd46f4f1ffda2200ff0e96f81c9b4619d827c": {
+    "rule": "ONE EARNED ENCOURAGEMENT is mandatory — must be specific and real",
+    "result": "PASS",
+    "reason": "The 'ONE EARNED ENCOURAGEMENT' section provides a specific and genuine commendation for the communicator's ability to make a clear and specific point.",
+    "eval_type": "llm",
+    "confidence": 0.9,
+    "category": "feedback"
+  },
+  "3b2de31ff27e8ebc7e0042026f755e15b6bac0f8d47310b8993d26fcc19af9b6": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "At least two of the suggested improvements, such as reducing filler words and establishing a clear structure, are directly related to communication fixes.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "f34abfc97339a2f1c59efbaa5ebe38d3c39c0ce8a8b2be2eea97c1d7b15c602d": {
+    "rule": "Follow-up must connect to what user actually said — not a generic question",
+    "result": "PASS",
+    "reason": "The AI's follow-ups, such as 'What I find interesting is that you said he looks like he owns the fountain', directly connect to the user's statements.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "7a4089bef40e09176d5c9d7f88e920bdb0b9ff12bf317aec523ce7d071c4a5ac": {
+    "rule": "AI must react curiously and playfully to what user said",
+    "result": "PASS",
+    "reason": "The AI reacts with curiosity and playfulness, as seen in 'That's a fun idea, a celebration in a fountain' and similar responses throughout the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "c0178f337863f1c6c4eabf33a678ba116d06e47256143bf8a44e1fc59a941eca": {
+    "rule": "Conversation should feel like two people exploring something strange together",
+    "result": "PASS",
+    "reason": "The conversation flows like an exploration between two people, with the AI and user building upon each other's ideas, such as discussing the man's possible reasons for being in the fountain.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "c1fae1f5a3d9f867923943b4169f16c674bb8d45aaf7462c079d84ea6834ee00": {
+    "rule": "AI must never evaluate content quality",
+    "result": "PASS",
+    "reason": "The AI does not evaluate the quality of the user's ideas or interpretations at any point in the conversation.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "da0933068887624503291f7cac56dbde3242b1b1ce7da3e6e09b116e75861137": {
+    "rule": "AI must never challenge the user's interpretation",
+    "result": "PASS",
+    "reason": "The AI does not challenge the user's interpretations but instead expands on them with curiosity, as seen in 'What do you think is going through the mind of the person standing closest to him'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "b07efeef42029815f8cf910b479d7bdf87b090619829e1c69c743cf29442a5de": {
+    "rule": "Goal is spontaneous speech — anything goes",
+    "result": "PASS",
+    "reason": "The conversation allows for spontaneous and open-ended discussion without adhering to a specific topic or structure.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "5cc5dc214214622d997462610cf3a4ac604e1d66a430c5ddaeff4bb758cbb849": {
+    "rule": "No correct answer — no topic to stay on",
+    "result": "PASS",
+    "reason": "The conversation does not aim for a 'correct' answer and freely moves between different ideas and interpretations.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "4aaf94eb0c85c435a690e37f7dcf6c5040c2719534b85b3f448683cb851bdd06": {
+    "rule": "Tone must be curious and playful",
+    "result": "PASS",
+    "reason": "The AI maintains a curious and playful tone throughout the conversation, as evident in phrases like 'That's a fun twist' and 'I love that idea'.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "3e37360611e26e39f31125fc96b386be25f6a49b79bbb349fb95a0908330a5a0": {
+    "rule": "AI must sound like a real person not a robot",
+    "result": "PASS",
+    "reason": "The AI's responses, such as 'What kind of colleagues do you think would come up with a bet that involves getting soaked in a fountain in a business suit?', sound natural and similar to how a human would speak.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "global"
+  },
+  "2bcca7a3029d8ec83014cecbd39190d777a30056861cb6b7983e3024dfa065a1": {
+    "rule": "Feedback harshness is 2 out of 10",
+    "result": "PASS",
+    "reason": "The feedback provided is gentle and constructive, indicating a low harshness level.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "f82fec562f065e86d88b66fe40c6e86d922a7560cd9c5e321d900a47fd83cbe5": {
+    "rule": "OVERALL VERDICT must be positive or neutral only",
+    "result": "PASS",
+    "reason": "The overall verdict describes the communicator as 'relaxed and casual', which is a positive description.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "02e32c4872e4019b177986269e15595a721e6e2bd27caa6c37f6d89cd06a1623": {
+    "rule": "WHAT WORKED must find at least 2 genuine things",
+    "result": "PASS",
+    "reason": "The feedback highlights the communicator's fluency and confidence as positive aspects.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "acc1737c1219add661e8db6215756a4c1788886577b832aaa8d88ac7061a9a75": {
+    "rule": "THREE THINGS TO FIX must be simple, kind, achievable",
+    "result": "PASS",
+    "reason": "The suggested fixes, such as reducing filler words and varying sentence structure, are straightforward and kindly presented.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  },
+  "b0655f417b72f69aca04877dd1c8f82eed6c325cabc31e06e217f12524698dd4": {
+    "rule": "THREE THINGS TO FIX must focus on fluency and flow only",
+    "result": "PARTIAL",
+    "reason": "While most fixes focus on fluency and flow, one suggestion touches upon rephrasing for clarity, which slightly deviates from the rule.",
+    "eval_type": "llm",
+    "confidence": 0.8,
+    "category": "feedback"
+  },
+  "136cb574d0e5116d686dd4e99fa40f6ef85fddab360a54309776a5f0457fbee4": {
+    "rule": "THREE THINGS TO FIX must never mention content quality or argument strength",
+    "result": "PARTIAL",
+    "reason": "The feedback mostly adheres to this rule but subtly touches upon content in suggesting rephrased sentences, which could imply a focus on argument strength.",
+    "eval_type": "llm",
+    "confidence": 0.7,
+    "category": "feedback"
+  },
+  "3b7c39525fcc37ec3c2343c5f872a7af136545518be49ed1d73f36e618cac90f": {
+    "rule": "THREE THINGS TO FIX: minimum 2 out of 3 must be communication fixes",
+    "result": "PASS",
+    "reason": "At least two of the suggested fixes, such as reducing filler words and varying sentence structure, are directly related to communication.",
+    "eval_type": "llm",
+    "confidence": 1.0,
+    "category": "feedback"
+  }
+}

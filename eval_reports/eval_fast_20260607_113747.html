@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArticulateX Evaluation Report</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        background: #0a0a0f;
+        color: #e0e0e0;
+        padding: 2rem;
+        line-height: 1.6;
+    }
+    .header {
+        text-align: center;
+        padding: 2rem 0;
+        border-bottom: 1px solid #222;
+        margin-bottom: 2rem;
+    }
+    .header h1 {
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .header .timestamp {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .metric {
+        background: #111118;
+        border: 1px solid #222;
+        border-radius: 12px;
+        padding: 1.2rem;
+        text-align: center;
+    }
+    .metric .value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }
+    .metric .label {
+        color: #888;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .metric.pass .value { color: #4caf50; }
+    .metric.fail .value { color: #ff4444; }
+    .metric.rate .value { color: #667eea; }
+    .metric.tokens .value { color: #ff9800; font-size: 1.5rem; }
+    .metric.cost .value { color: #00bcd4; }
+    .metric.cache .value { color: #9c27b0; }
+    .section { margin-bottom: 2rem; }
+    .section h2 {
+        font-size: 1.2rem;
+        color: #aaa;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #1a1a2e;
+    }
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+    .card {
+        background: #111118;
+        border: 1px solid #222;
+        border-radius: 12px;
+        padding: 1.2rem;
+    }
+    .card h3 {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+        color: #ccc;
+    }
+    .progress-bar {
+        height: 8px;
+        background: #1a1a2e;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.8rem;
+    }
+    .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+    .stats-row {
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+    .stat {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .stat.pass { color: #4caf50; }
+    .stat.partial { color: #ff9800; }
+    .stat.fail { color: #ff4444; }
+    .stat.skip { color: #666; }
+    .stat.rate { color: #667eea; margin-left: auto; }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    th, td {
+        padding: 0.7rem;
+        text-align: left;
+        border-bottom: 1px solid #1a1a2e;
+    }
+    th {
+        background: #111118;
+        color: #888;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        position: sticky;
+        top: 0;
+    }
+    tr:hover td {
+        background: #111118;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>ArticulateX Evaluation Report</h1>
+    <div class="timestamp">Generated: 2026-06-07 11:37:47</div>
+</div>
+
+<div class="summary-grid">
+    <div class="metric rate">
+        <div class="value">85.6%</div>
+        <div class="label">Pass Rate</div>
+    </div>
+    <div class="metric pass">
+        <div class="value">89</div>
+        <div class="label">Passed</div>
+    </div>
+    <div class="metric fail">
+        <div class="value">6</div>
+        <div class="label">Failed</div>
+    </div>
+    <div class="metric">
+        <div class="value">9</div>
+        <div class="label">Partial</div>
+    </div>
+    <div class="metric">
+        <div class="value">11</div>
+        <div class="label">Skipped</div>
+    </div>
+    <div class="metric tokens">
+        <div class="value">12,133</div>
+        <div class="label">Total Tokens</div>
+    </div>
+    <div class="metric">
+        <div class="value">8</div>
+        <div class="label">API Calls</div>
+    </div>
+    <div class="metric cost">
+        <div class="value">$0.0000</div>
+        <div class="label">Est. Cost</div>
+    </div>
+    <div class="metric cache">
+        <div class="value">0%</div>
+        <div class="label">Cache Hit Rate</div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Per-Scenario Results</h2>
+    <div class="cards-grid">
+        
+        <div class="card">
+            <h3>FreeStyle — Random Word</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 90%; background: #4caf50"></div>
+            </div>
+            <div class="stats-row">
+                <span class="stat pass">✓ 27</span>
+                <span class="stat partial">~ 1</span>
+                <span class="stat fail">✗ 2</span>
+                <span class="stat skip">⊘ 0</span>
+                <span class="stat rate">90%</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Debate Level 1</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 83%; background: #4caf50"></div>
+            </div>
+            <div class="stats-row">
+                <span class="stat pass">✓ 40</span>
+                <span class="stat partial">~ 6</span>
+                <span class="stat fail">✗ 2</span>
+                <span class="stat skip">⊘ 11</span>
+                <span class="stat rate">83%</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Weird Situation</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 85%; background: #4caf50"></div>
+            </div>
+            <div class="stats-row">
+                <span class="stat pass">✓ 22</span>
+                <span class="stat partial">~ 2</span>
+                <span class="stat fail">✗ 2</span>
+                <span class="stat skip">⊘ 0</span>
+                <span class="stat rate">85%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Failed &amp; Partial Rules</h2>
+    <div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>Scenario</th>
+                <th>Category</th>
+                <th>Eval Type</th>
+                <th>Rule</th>
+                <th>Result</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                <tr>
+                    <td>FreeStyle — Random Word</td>
+                    <td>global</td>
+                    <td>deterministic</td>
+                    <td>AI must never use banned phrases: great point / excellent / well argued / good p</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">Banned phrases used: Turn 5: 'interesting'</td>
+                </tr>
+                <tr>
+                    <td>FreeStyle — Random Word</td>
+                    <td>global</td>
+                    <td>deterministic</td>
+                    <td>AI must vary sentence starter every turn — never start two consecutive responses</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">Repeated starters: Turn 5: repeated starter 'that's'</td>
+                </tr>
+                <tr>
+                    <td>FreeStyle — Random Word</td>
+                    <td>feedback</td>
+                    <td>llm</td>
+                    <td>THREE THINGS TO FIX must focus on fluency and flow only</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">While most suggestions focus on fluency and flow, such as reducing filler words and improving pace, one suggestion touches upon confidence, which is related but slightly broader than just fluency and flow.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>If user trailed off: prompt to finish that thought</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">The AI did not have an opportunity to prompt the user to finish a trailed-off thought in the provided conversation transcript.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>If user used many fillers: note it once gently then move on — never block progre</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">The AI did not have an opportunity to address the user's use of fillers in the provided conversation transcript.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>If user lost their thread: ask where they were going with that</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">In Turn 4, the AI asked for clarification when the user's point was unclear, but it's not a clear example of the user losing their thread.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>Never ask user to be more specific about content in Level 1</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">In Turn 4 and Turn 5, the AI asked the user to clarify or restate their points, which could be seen as asking for more specificity.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>AI must encourage user to use simple English</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">While the AI's responses were clear and simple, there was no explicit encouragement for the user to use simple English.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>global</td>
+                    <td>llm</td>
+                    <td>If user changed position without reasoning — call it out</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">The AI noticed the user's shift in perspective in Turn 3 but did not explicitly ask for reasoning behind the change, instead choosing to explore the new perspective.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>escalation</td>
+                    <td>llm</td>
+                    <td>Turn 3+: slightly more engaged but still gentle</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">While the AI's responses in turns 4 and 5 were still relatively gentle, they could be seen as slightly more probing, but the tone remained mostly consistent with earlier turns, as seen in turn 4 where the AI asked the user to 'restate it more clearly'.</td>
+                </tr>
+                <tr>
+                    <td>Debate Level 1</td>
+                    <td>escalation</td>
+                    <td>llm</td>
+                    <td>Difficulty increases gradually turn by turn</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">The difficulty of the AI's questions did not increase noticeably from turn 1 to turn 5, with similar types of clarifying questions being asked throughout, such as 'can you explain' and 'can you help me understand'.</td>
+                </tr>
+                <tr>
+                    <td>Weird Situation</td>
+                    <td>global</td>
+                    <td>deterministic</td>
+                    <td>AI must never use banned phrases: great point / excellent / well argued / good p</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">Banned phrases used: Turn 1: 'interesting'; Turn 5: 'interesting'</td>
+                </tr>
+                <tr>
+                    <td>Weird Situation</td>
+                    <td>global</td>
+                    <td>deterministic</td>
+                    <td>AI must vary sentence starter every turn</td>
+                    <td style="color: #ff4444; font-weight: bold">FAIL</td>
+                    <td style="font-size: 0.85em">Repeated starters: Turn 3: repeated starter 'that's'</td>
+                </tr>
+                <tr>
+                    <td>Weird Situation</td>
+                    <td>feedback</td>
+                    <td>llm</td>
+                    <td>THREE THINGS TO FIX must focus on fluency and flow only</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">While most fixes focus on fluency and flow, one suggestion touches upon rephrasing for clarity, which slightly deviates from the rule.</td>
+                </tr>
+                <tr>
+                    <td>Weird Situation</td>
+                    <td>feedback</td>
+                    <td>llm</td>
+                    <td>THREE THINGS TO FIX must never mention content quality or argument strength</td>
+                    <td style="color: #ff9800; font-weight: bold">PARTIAL</td>
+                    <td style="font-size: 0.85em">The feedback mostly adheres to this rule but subtly touches upon content in suggesting rephrased sentences, which could imply a focus on argument strength.</td>
+                </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+</body>
+</html>
