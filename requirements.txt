@@ -1,15 +1,12 @@
 groq
 google-genai
 python-dotenv
-sounddevice
 soundfile
 numpy
 assemblyai[extras]>=0.40.0
-pydub
 requests
 fastapi
 uvicorn[standard]
-python-multipart
 scipy
 gtts
 bcrypt
