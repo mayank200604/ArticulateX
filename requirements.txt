@@ -3,7 +3,7 @@ google-genai
 python-dotenv
 soundfile
 numpy
-assemblyai[extras]>=0.40.0
+assemblyai>=0.40.0
 requests
 fastapi
 uvicorn[standard]
