@@ -11,4 +11,4 @@ scipy
 gtts
 bcrypt
 psycopg2-binary
-
+itsdangerous
