@@ -76,7 +76,7 @@ function showScreen(id) {
 
   // Show/hide global nav
   const nav = document.getElementById('global-nav');
-  if (id === 'screen-landing') {
+  if (id === 'screen-landing' || id === 'screen-auth') {
     nav.classList.add('hidden');
   } else {
     nav.classList.remove('hidden');
@@ -386,11 +386,22 @@ async function playFullReport() {
    AUDIO — Play TTS from /audio/response
    ══════════════════════════════════════════════════════════ */
 function playTTSAudio() {
-  const audio = document.getElementById('tts-audio');
-  if (!audio) return;
-  audio.src = '/audio/response?t=' + Date.now();
-  audio.load();
-  audio.play().catch(err => console.warn('[TTS] Autoplay blocked:', err));
+  return new Promise((resolve) => {
+    const audio = document.getElementById('tts-audio');
+    if (!audio) return resolve();
+    
+    audio.src = '/audio/response?t=' + Date.now();
+    audio.load();
+    
+    // Resolve when audio finishes naturally or errors
+    audio.onended = () => resolve();
+    audio.onerror = () => resolve();
+    
+    audio.play().catch(err => {
+      console.warn('[TTS] Autoplay blocked:', err);
+      resolve();
+    });
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -600,7 +611,7 @@ async function startRecording() {
   // AudioContext for real-time PCM streaming to WebSocket
   STATE.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
   STATE.sourceNode = STATE.audioContext.createMediaStreamSource(STATE.mediaStream);
-  STATE.scriptProcessor = STATE.audioContext.createScriptProcessor(4096, 1, 1);
+  STATE.scriptProcessor = STATE.audioContext.createScriptProcessor(2048, 1, 1);
   
   let lastActiveTime = Date.now();
   let hasSpoken = false;
@@ -956,8 +967,9 @@ async function handleSubmitTurn() {
     }
 
     // Play TTS audio
+    let ttsPromise = Promise.resolve();
     if (data.audio_ready) {
-      playTTSAudio();
+      ttsPromise = playTTSAudio();
     }
 
     // Reset recording state
@@ -966,16 +978,18 @@ async function handleSubmitTurn() {
     // Calibration auto-complete check
     if (data.calibration_complete) {
       notify('Calibration complete! Generating your baseline...', 'success');
-      setTimeout(async () => {
-        try {
-          const calData = await fetchCalibrationReport();
-          buildCalibrationReport(calData);
-          showScreen('screen-calibration-report');
-        } catch (err) {
-          console.error('[Calibration Report]', err);
-          notify('Could not generate calibration report.', 'error');
-        }
-      }, 1200);
+      
+      // Wait for AI to finish speaking
+      await ttsPromise;
+      
+      try {
+        const calData = await fetchCalibrationReport();
+        buildCalibrationReport(calData);
+        showScreen('screen-calibration-report');
+      } catch (err) {
+        console.error('[Calibration Report]', err);
+        notify('Could not generate calibration report.', 'error');
+      }
     }
 
   } catch (err) {
@@ -1262,22 +1276,30 @@ function extractSections(text) {
   // Extract 3 fix items from the fixes section only (not full report)
   const fixSource = result.fixesRaw || '';
   if (fixSource) {
+    const parseFixBlock = (blockText, index) => {
+      const match = blockText.match(/\b(REASON|EXAMPLE|TRY THIS( INSTEAD)?):/i);
+      let tStr = '';
+      let bStr = '';
+      if (match && match.index > 0) {
+        tStr = blockText.substring(0, match.index).trim();
+        bStr = blockText.substring(match.index).trim();
+      } else {
+        const lines = blockText.trim().split('\n');
+        tStr = lines[0];
+        bStr = lines.slice(1).join('\n').trim();
+      }
+      const title = tStr.replace(/^(?:POINT|[1-3][.)\s:])+\s*/i, '').replace(/^[•\-*\d.)\s]+/, '').trim() || `Point ${index+1}`;
+      return { title, body: bStr };
+    };
+
     // Try structured POINT/REASON/EXAMPLE/TRY THIS parsing first
     const pointBlocks = fixSource.split(/(?=(?:^|\n)\s*(?:POINT|[1-3][.)]))/).filter(Boolean);
     if (pointBlocks.length >= 2) {
-      result.fixes = pointBlocks.slice(0, 3).map((block, i) => {
-        const blockLines = block.trim().split('\n');
-        const title = blockLines[0].replace(/^(?:POINT|[1-3][.)\s:])+\s*/i, '').trim() || `Point ${i+1}`;
-        const body  = blockLines.slice(1).join('\n').trim();
-        return { title, body };
-      });
+      result.fixes = pointBlocks.slice(0, 3).map((block, i) => parseFixBlock(block, i));
     } else {
       // Fallback: split by double-newlines
       const chunks = fixSource.split(/\n\n+/).filter(Boolean).slice(0, 3);
-      result.fixes = chunks.map((c, i) => ({
-        title: c.split('\n')[0].replace(/^[•\-*\d.)\s]+/, '').trim() || `Point ${i+1}`,
-        body:  c.split('\n').slice(1).join('\n').trim(),
-      }));
+      result.fixes = chunks.map((c, i) => parseFixBlock(c, i));
     }
 
     // Filter out any fix items that are actually bled section headers
@@ -1361,15 +1383,23 @@ function buildFixes(fixes) {
     inner.classList.add('fix-body-inner');
 
     if (fix.body) {
-      const reasonLabel = document.createElement('div');
-      reasonLabel.classList.add('fix-reason');
-      reasonLabel.textContent = 'REASON';
+      let formattedBody = fix.body;
+      
+      // If the LLM omitted the keyword, add a default one for structure
+      if (!formattedBody.match(/^\s*(REASON|EXAMPLE|TRY THIS( INSTEAD)?):/i)) {
+         formattedBody = 'REASON: ' + formattedBody;
+      }
 
-      const reasonText = document.createElement('p');
+      // Replace the keywords with stylized labels
+      formattedBody = formattedBody.replace(/\b(REASON|EXAMPLE|TRY THIS( INSTEAD)?):\s*/gi, '<div class="fix-reason" style="margin-top: 12px; margin-bottom: 4px;">$1</div>');
+      
+      // Remove the first margin-top so it aligns well at the top of the box
+      formattedBody = formattedBody.replace('style="margin-top: 12px; margin-bottom: 4px;"', 'style="margin-bottom: 4px;"');
+
+      const reasonText = document.createElement('div');
       reasonText.classList.add('fix-reason-text');
-      reasonText.textContent = fix.body;
+      reasonText.innerHTML = formattedBody;
 
-      inner.appendChild(reasonLabel);
       inner.appendChild(reasonText);
     }
 
@@ -1464,6 +1494,7 @@ const MODE_META = {
 function renderModeDetail(mode) {
   const meta = MODE_META[mode] || MODE_META.freestyle;
 
+  document.getElementById('mode-detail')?.setAttribute('data-mode', mode);
   setText('mode-detail-name',    meta.name);
   setText('mode-detail-tagline', meta.tagline);
 
@@ -1480,9 +1511,9 @@ function renderModeDetail(mode) {
         if (!seg) return;
         seg.className = 'difficulty-seg';
         if (i < meta.level) {
-          if (meta.level === 1) seg.classList.add('active-blue');
-          else if (meta.level === 2) seg.classList.add('active-orange');
-          else seg.classList.add('active-red');
+          if (meta.level === 1) seg.classList.add('active-d1');
+          else if (meta.level === 2) seg.classList.add('active-d2');
+          else seg.classList.add('active-d3');
         }
       });
     } else {
@@ -1561,9 +1592,9 @@ function applyUnlockState(state) {
   const lockConditions = {
     freestyle: { unlocked: state.freestyle, text: 'Complete calibration to unlock.' },
     debate1:   { unlocked: state.debate1,   text: 'Complete calibration to unlock.' },
-    debate2:   { unlocked: state.debate2,   text: `Complete ${state.debate2_remaining} more Level 1 session${state.debate2_remaining !== 1 ? 's' : ''} to unlock.` },
-    debate3:   { unlocked: state.debate3,   text: `Complete ${state.debate3_remaining} more Level 2 session${state.debate3_remaining !== 1 ? 's' : ''} to unlock.` },
-    weird:     { unlocked: state.weird,     text: 'Complete calibration to unlock.' },
+    debate2:   { unlocked: state.debate2,   text: `Complete ${state.debate2_remaining} more Level 1 session${state.debate2_remaining !== 1 ? 's' : ''} to unlock Debate Medium.` },
+    debate3:   { unlocked: state.debate3,   text: `Complete ${state.debate3_remaining} more Level 2 session${state.debate3_remaining !== 1 ? 's' : ''} to unlock Debate Hard.` },
+    weird:     { unlocked: false, text: 'Will be unlocked in a future update.' },
   };
 
   const modes = ['freestyle', 'debate1', 'debate2', 'debate3', 'weird'];
@@ -1689,9 +1720,17 @@ async function renderSetupTopicStep(mode) {
       refreshBtn.setAttribute('type', 'button');
       refreshBtn.setAttribute('title', 'Get different topics');
       refreshBtn.textContent = '↺';
-      refreshBtn.addEventListener('click', () => {
-        allTopics = shuffle(allTopics);
-        renderDebate1Topics(allTopics);
+      refreshBtn.addEventListener('click', async () => {
+        refreshBtn.classList.add('spinning');
+        refreshBtn.disabled = true;
+        try {
+          allTopics = await fetchTopics(1);
+          renderDebate1Topics(shuffle(allTopics));
+        } catch (e) {
+          console.error('[Refresh]', e);
+          refreshBtn.classList.remove('spinning');
+          refreshBtn.disabled = false;
+        }
       });
       refreshRow.appendChild(refreshBtn);
       topicCardsEl.appendChild(refreshRow);
@@ -2030,6 +2069,13 @@ function initSessionScreen(setupData) {
   STATE.sessionLevel   = setupData.level;
   STATE.sessionMode    = setupData.mode;
   
+  // Create the session record in the DB now that the session is officially beginning
+  fetch('/api/start-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ session_token: setupData.token })
+  }).catch(e => console.error('[Start Session Error]', e));
+  
   // Set silence limit based on level and mode rules
   if (setupData.mode === 'freestyle') {
     STATE.silenceSeconds = null; // No limit
@@ -2084,6 +2130,17 @@ function initSessionScreen(setupData) {
   const emptyState = document.getElementById('session-empty-state');
   if (emptyState) emptyState.style.display = '';
 
+  // Fix 1: Ensure feedback button is visible for all regular modes 
+  // (it gets explicitly hidden during Calibration)
+  const fbBtn = document.getElementById('btn-get-feedback');
+  if (fbBtn) {
+    if (setupData.mode === 'calibration') {
+      fbBtn.style.display = 'none';
+    } else {
+      fbBtn.style.display = '';
+    }
+  }
+
   // Reset recording bar
   STATE.recordState          = 'idle';
   STATE.interruptedByServer  = false;
@@ -2112,6 +2169,155 @@ async function loadDashboard() {
   });
 
   renderDashboard('overview');
+  await loadPatterns();
+  await loadVoiceIdentity();
+  await loadMilestones();
+}
+
+async function loadPatterns() {
+  try {
+    const res = await fetch('/api/patterns');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderPatterns(data.patterns, data.enough_sessions);
+  } catch (e) {
+    console.error('Failed to load patterns', e);
+  }
+}
+
+function renderPatterns(patterns, enoughSessions) {
+  const listEl = document.getElementById('dash-patterns-list');
+  if (!listEl) return;
+  listEl.innerHTML = '';
+
+  if (!enoughSessions && patterns.length === 0) {
+    listEl.innerHTML = '<div class="dash-empty-patterns">Not enough sessions yet to detect patterns. Complete 5 sessions to unlock your recurring delivery patterns.</div>';
+    return;
+  }
+  
+  if (patterns.length === 0) {
+    listEl.innerHTML = '<div class="dash-empty-patterns">No recurring patterns discovered yet. Keep practicing!</div>';
+    return;
+  }
+
+  patterns.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'pattern-card';
+    
+    // Properly escape pattern text to prevent XSS
+    const textNode = document.createTextNode(p);
+    el.appendChild(textNode);
+    
+    listEl.appendChild(el);
+  });
+}
+
+// ── Voice Identity ────────────────────────────────────────────────
+async function loadVoiceIdentity() {
+  try {
+    const res = await fetch('/api/voice-identity');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderVoiceIdentity(data.identity);
+  } catch (err) {
+    console.error("Error loading voice identity:", err);
+  }
+}
+
+function renderVoiceIdentity(identity) {
+  const wrap = document.getElementById('dash-voice-identity');
+  if (!identity) {
+    wrap.classList.add('hidden');
+    return;
+  }
+  
+  wrap.classList.remove('hidden');
+  
+  const labelEl = document.getElementById('voice-identity-label');
+  const descEl = document.getElementById('voice-identity-desc');
+  
+  // Clear and safely inject text
+  labelEl.innerHTML = '';
+  descEl.innerHTML = '';
+  labelEl.appendChild(document.createTextNode(identity.label));
+  descEl.appendChild(document.createTextNode(identity.description));
+}
+
+// ── Milestone Narratives ──────────────────────────────────────────
+async function loadMilestones() {
+  try {
+    const res = await fetch('/api/milestones');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderMilestones(data.milestones || []);
+  } catch (err) {
+    console.error("Error loading milestones:", err);
+  }
+}
+
+function renderMilestones(milestones) {
+  const wrap = document.getElementById('dash-milestone-wrap');
+  if (!milestones || milestones.length === 0) {
+    wrap.classList.add('hidden');
+    return;
+  }
+  
+  wrap.classList.remove('hidden');
+  
+  // Most recent
+  const latest = milestones[0];
+  const narrativeEl = document.getElementById('milestone-narrative');
+  const countEl = document.getElementById('milestone-session-count');
+  
+  narrativeEl.innerHTML = '';
+  narrativeEl.appendChild(document.createTextNode(latest.narrative));
+  
+  countEl.innerHTML = '';
+  countEl.appendChild(document.createTextNode(`Session ${latest.session_count}`));
+  
+  // Older milestones
+  const pastWrap = document.getElementById('milestone-past-wrap');
+  const pastList = document.getElementById('milestone-past-list');
+  const toggleBtn = document.getElementById('milestone-toggle');
+  
+  if (milestones.length > 1) {
+    pastWrap.classList.remove('hidden');
+    pastList.innerHTML = '';
+    
+    // Skip the first one
+    for (let i = 1; i < milestones.length; i++) {
+      const m = milestones[i];
+      const item = document.createElement('div');
+      item.className = 'milestone-past-item';
+      
+      const title = document.createElement('strong');
+      title.appendChild(document.createTextNode(`Session ${m.session_count}`));
+      
+      const text = document.createElement('p');
+      text.appendChild(document.createTextNode(m.narrative));
+      
+      item.appendChild(title);
+      item.appendChild(text);
+      pastList.appendChild(item);
+    }
+    
+    // Set up toggle exactly once
+    if (!toggleBtn.dataset.bound) {
+      toggleBtn.dataset.bound = "true";
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = pastList.classList.contains('hidden');
+        if (isHidden) {
+          pastList.classList.remove('hidden');
+          toggleBtn.textContent = 'Hide past milestones ▴';
+        } else {
+          pastList.classList.add('hidden');
+          toggleBtn.textContent = 'View past milestones ▾';
+        }
+      });
+    }
+  } else {
+    pastWrap.classList.add('hidden');
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2511,8 +2717,20 @@ function buildSessionTable(sessions) {
    EVENT HANDLERS — Wire up all buttons
    ══════════════════════════════════════════════════════════ */
 function wireEvents() {
-  // Landing → Home
+  // Landing → Start Training
   document.getElementById('btn-start-training')?.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/api/me');
+      const authData = await res.json();
+      if (!authData.logged_in) {
+        showScreen('screen-auth');
+        return;
+      }
+    } catch (e) {
+      showScreen('screen-auth');
+      return;
+    }
+
     await loadDashboard();
     const unlock = await fetchUnlockState();
     renderModeDetail(STATE.currentMode);
@@ -2521,8 +2739,12 @@ function wireEvents() {
     showScreen('screen-home');
   });
 
+  // Landing → How it works
   document.getElementById('btn-how-it-works')?.addEventListener('click', () => {
-    notify('Five modes. Real scenarios. Honest AI feedback. Pick a mode and begin.', 'default');
+    const section = document.getElementById('landing-features-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 
   // Nav links
@@ -2531,6 +2753,71 @@ function wireEvents() {
     applyUnlockState(unlock);
     showScreen('screen-home');
   });
+
+  // Auth Logout
+  document.getElementById('nav-logout')?.addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    window.location.reload();
+  });
+
+  // Auth Tabs Toggle
+  const tabSignin = document.getElementById('tab-signin');
+  const tabRegister = document.getElementById('tab-register');
+  const btnLogin = document.getElementById('btn-login');
+  const btnRegister = document.getElementById('btn-register');
+
+  if (tabSignin && tabRegister) {
+    tabSignin.addEventListener('click', () => {
+      tabSignin.classList.add('active');
+      tabRegister.classList.remove('active');
+      btnLogin.classList.remove('hidden');
+      btnRegister.classList.add('hidden');
+      document.getElementById('auth-error').classList.add('hidden');
+    });
+
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabSignin.classList.remove('active');
+      btnRegister.classList.remove('hidden');
+      btnLogin.classList.add('hidden');
+      document.getElementById('auth-error').classList.add('hidden');
+    });
+  }
+
+  // Auth Login / Register
+  const authForm = document.getElementById('auth-form');
+  if (authForm) {
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('auth-username').value;
+      const password = document.getElementById('auth-password').value;
+      const submitter = e.submitter;
+      const action = submitter.getAttribute('formaction');
+      const errEl = document.getElementById('auth-error');
+      
+      errEl.classList.add('hidden');
+      
+      try {
+        const res = await fetch(`/api/${action}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        if (!res.ok) {
+          const data = await res.json();
+          errEl.textContent = data.detail || 'Authentication failed';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        
+        window.location.reload();
+      } catch (err) {
+        errEl.textContent = 'Network error';
+        errEl.classList.remove('hidden');
+      }
+    });
+  }
 
   document.getElementById('nav-progress')?.addEventListener('click', async () => {
     await loadDashboard();
@@ -2553,6 +2840,22 @@ function wireEvents() {
 
   // Mode nav items
   document.querySelectorAll('.mode-nav-item').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      if (btn.classList.contains('mode-locked')) return;
+      const mode = btn.dataset.mode;
+      let multiplier = 1.0;
+      if (mode === 'freestyle' || mode === 'calibration') multiplier = 0.5;
+      else if (mode === 'debate1') multiplier = 1.0;
+      else if (mode === 'debate2') multiplier = 1.5;
+      else if (mode === 'debate3') multiplier = 2.0;
+      else if (mode === 'weird') multiplier = 1.2;
+      document.documentElement.style.setProperty('--intensity-multiplier', multiplier);
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      document.documentElement.style.setProperty('--intensity-multiplier', 1.0);
+    });
+
     btn.addEventListener('click', () => {
       // Guard against locked modes
       if (btn.classList.contains('mode-locked')) return;
@@ -2682,6 +2985,84 @@ function wireEvents() {
       initSessionScreen(data);
       initVoiceCircle('voice-circle-session', 80);
       initVoiceCircle('voice-circle-home',    120);
+
+      // Level 1: show expectation modal before entering session
+      if (STATE.currentMode === 'debate1') {
+        const modalL1 = document.getElementById('level1-warning-modal');
+        if (modalL1) {
+          modalL1.classList.remove('hidden');
+          modalL1.classList.add('terminal-flash-enter');
+          setLoading(btn, false);
+          await new Promise(resolve => {
+            const dismissBtnL1 = document.getElementById('btn-l1-dismiss');
+            const handlerL1 = () => {
+              dismissBtnL1.removeEventListener('click', handlerL1);
+              modalL1.classList.add('hidden');
+              resolve();
+            };
+            dismissBtnL1.addEventListener('click', handlerL1);
+          });
+        }
+      }
+
+      // Level 2: show expectation modal before entering session
+      if (STATE.currentMode === 'debate2') {
+        const modalL2 = document.getElementById('level2-warning-modal');
+        if (modalL2) {
+          modalL2.classList.remove('hidden');
+          modalL2.classList.add('terminal-flash-enter');
+          setLoading(btn, false);
+          await new Promise(resolve => {
+            const dismissBtnL2 = document.getElementById('btn-l2-dismiss');
+            const handlerL2 = () => {
+              dismissBtnL2.removeEventListener('click', handlerL2);
+              modalL2.classList.add('hidden');
+              resolve();
+            };
+            dismissBtnL2.addEventListener('click', handlerL2);
+          });
+        }
+      }
+
+      // Level 3: show warning modal before entering session
+      if (STATE.currentMode === 'debate3') {
+        const modalL3 = document.getElementById('level3-warning-modal');
+        if (modalL3) {
+          modalL3.classList.remove('hidden');
+          modalL3.classList.add('terminal-flash-enter');
+          setLoading(btn, false);
+          // Wait for user acknowledgement of L3 warning
+          await new Promise(resolve => {
+            const dismissBtnL3 = document.getElementById('btn-l3-dismiss');
+            const handlerL3 = () => {
+              dismissBtnL3.removeEventListener('click', handlerL3);
+              modalL3.classList.add('hidden');
+              resolve();
+            };
+            dismissBtnL3.addEventListener('click', handlerL3);
+          });
+        }
+        
+        // Check for invisible audience effect (every 5th session)
+        if (data.debate3_session_count > 0 && data.debate3_session_count % 5 === 0) {
+          const modalAudience = document.getElementById('audience-effect-modal');
+          if (modalAudience) {
+            modalAudience.classList.remove('hidden');
+            modalAudience.classList.add('terminal-flash-enter');
+            // Wait for user acknowledgement of audience modal
+            await new Promise(resolve => {
+              const dismissBtnAud = document.getElementById('btn-audience-dismiss');
+              const handlerAud = () => {
+                dismissBtnAud.removeEventListener('click', handlerAud);
+                modalAudience.classList.add('hidden');
+                resolve();
+              };
+              dismissBtnAud.addEventListener('click', handlerAud);
+            });
+          }
+        }
+      }
+
       showScreen('screen-session');
     } catch (err) {
       console.error('[Setup]', err);
@@ -2715,8 +3096,25 @@ function wireEvents() {
     setLoading(btn, false);
   });
 
+  // Report — Back to home
+  document.getElementById('btn-report-back')?.addEventListener('click', async () => {
+    const data = await fetchDashboard();
+    STATE.dashboardData = data;
+    updateSidebarStats(data);
+    const unlock = await fetchUnlockState();
+    if (unlock) applyUnlockState(unlock);
+    renderModeDetail(STATE.currentMode);
+    showScreen('screen-home');
+  });
+
   // Report — New session
-  document.getElementById('btn-new-session')?.addEventListener('click', () => {
+  document.getElementById('btn-new-session')?.addEventListener('click', async () => {
+    const data = await fetchDashboard();
+    STATE.dashboardData = data;
+    updateSidebarStats(data);
+    const unlock = await fetchUnlockState();
+    if (unlock) applyUnlockState(unlock);
+    renderModeDetail(STATE.currentMode);
     showScreen('screen-home');
   });
 
@@ -2738,6 +3136,21 @@ window.onload = async function () {
 
   // Wire all event listeners
   wireEvents();
+
+  // Check Auth
+  let isLoggedIn = false;
+  try {
+    const res = await fetch('/api/me');
+    const authData = await res.json();
+    isLoggedIn = authData.logged_in;
+  } catch (e) {
+    isLoggedIn = false;
+  }
+
+  if (!isLoggedIn) {
+    showScreen('screen-landing');
+    return;
+  }
 
   // Load dashboard data in background (for landing stats)
   try {
@@ -2764,5 +3177,20 @@ window.onload = async function () {
     initVoiceCircle('voice-circle-home', 120);
   } else {
     showScreen('screen-landing');
+  }
+
+  // Fetch daily quote
+  try {
+    const qRes = await fetch('/api/daily_quote');
+    if (qRes.ok) {
+      const qData = await qRes.json();
+      if (qData.is_new_today && qData.quote) {
+        document.getElementById('daily-quote-category').textContent = qData.quote.category;
+        document.getElementById('daily-quote-text').textContent = `"${qData.quote.text}"`;
+        document.getElementById('embedded-daily-quote').classList.remove('hidden');
+      }
+    }
+  } catch (e) {
+    console.warn('[Init] Failed to fetch daily quote:', e);
   }
 };

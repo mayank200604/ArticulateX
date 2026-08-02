@@ -7,22 +7,25 @@ a compact profile dict from the last 5 completed sessions.
 Performance target: < 200ms. Pure SQL + Python — zero LLM calls.
 """
 
-import sqlite3
-from core.memory import DB_PATH
+from core.db import get_conn
+from core.memory import _use_conn
 
 
-def get_user_profile(session_token: str) -> dict:
+def get_user_profile(user_id: int, *, conn=None) -> dict:
     """
     Build a compact user profile from historical session data.
 
     Queries the last 5 completed sessions (total_turns > 0) from
-    SQLite and computes trends, dominant mode, and averages.
+    PostgreSQL and computes trends, dominant mode, and averages.
 
     Parameters
     ----------
-    session_token : str
-        Current session token (used for context, not DB lookup —
-        profile is built from all past sessions).
+    user_id : int
+        The authenticated user's ID. All queries are scoped
+        to sessions belonging to this user.
+    conn : connection, optional
+        An existing DB connection to reuse. If None, a new one
+        is checked out from the pool.
 
     Returns
     -------
@@ -30,38 +33,37 @@ def get_user_profile(session_token: str) -> dict:
         total_sessions, last_5_sessions, wpm_trend, filler_trend,
         dominant_mode, most_played_level, avg_wpm, avg_fillers
     """
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    with _use_conn(conn) as c:
+        cursor = c.cursor()
 
-    # Total completed sessions
-    cursor.execute(
-        "SELECT COUNT(*) FROM sessions WHERE total_turns > 0"
-    )
-    total_sessions = cursor.fetchone()[0]
+        # Total completed sessions
+        cursor.execute(
+            "SELECT COUNT(*) FROM sessions WHERE total_turns > 0 AND user_id = %s",
+            (user_id,)
+        )
+        total_sessions = cursor.fetchone()[0]
 
-    # Last 5 completed sessions (most recent first)
-    cursor.execute("""
-        SELECT id, session_date, mode, avg_wpm, avg_filler_count
-        FROM sessions
-        WHERE total_turns > 0
-        ORDER BY session_date DESC
-        LIMIT 5
-    """)
-    rows = cursor.fetchall()
+        # Last 5 completed sessions (most recent first)
+        cursor.execute("""
+            SELECT id, session_date, mode, avg_wpm, avg_filler_count
+            FROM sessions
+            WHERE total_turns > 0 AND user_id = %s
+            ORDER BY session_date DESC
+            LIMIT 5
+        """, (user_id,))
+        rows = cursor.fetchall()
 
-    # Dominant mode across all completed sessions
-    cursor.execute("""
-        SELECT mode, COUNT(*) as cnt
-        FROM sessions
-        WHERE total_turns > 0
-        GROUP BY mode
-        ORDER BY cnt DESC
-        LIMIT 1
-    """)
-    mode_row = cursor.fetchone()
-    dominant_mode = mode_row[0] if mode_row else "None"
-
-    conn.close()
+        # Dominant mode across all completed sessions
+        cursor.execute("""
+            SELECT mode, COUNT(*) as cnt
+            FROM sessions
+            WHERE total_turns > 0 AND user_id = %s
+            GROUP BY mode
+            ORDER BY cnt DESC
+            LIMIT 1
+        """, (user_id,))
+        mode_row = cursor.fetchone()
+        dominant_mode = mode_row[0] if mode_row else "None"
 
     if not rows:
         return {

@@ -34,11 +34,11 @@ _SHARED_DEBATE_TOPICS = [
     "Does social media create unrealistic expectations about life?",
 
     # Challenging and Hypothetical (21–25)
-    "If you had to eliminate one subject from school permanently, what would it be and why?",
+    "This house believes arts subjects should be removed from the mandatory school curriculum.",
     "Should artificial intelligence be allowed to make legal decisions?",
     "If given a choice between fame and impact, which would you choose?",
     "Is it ethical for companies to monitor employee productivity remotely?",
-    "Should freedom of speech have limits, and who decides those limits?",
+    "Should freedom of speech have limits?",
 ]
 
 # ── Level-specific topics ────────────────────────────────────────
@@ -75,13 +75,63 @@ DEBATE_LEVEL_3_TOPICS = _SHARED_DEBATE_TOPICS + _LEVEL_3_SPECIFIC
 
 # ── FreeStyle topics (open-ended, no right answer) ───────────────
 
-FREESTYLE_TOPICS = [
+FREESTYLE_WORDS = [
+    "Resilience",
+    "Ambiguity",
+    "Nostalgia",
+    "Vulnerability",
+    "Curiosity",
+    "Authenticity",
+    "Patience",
+    "Serendipity",
+    "Perseverance",
+    "Empathy",
+    "Procrastination",
+    "Courage",
+    "Minimalism",
+    "Intuition",
+    "Compromise",
+    "Solitude",
+    "Gratitude",
+    "Adaptability",
+    "Innovation",
+    "Skepticism",
+    "Legacy",
+    "Momentum",
+    "Friction",
+    "Paradox",
+    "Nuance"
+]
+
+FREESTYLE_SCENARIOS = [
     "Describe a moment that changed how you think about something important",
     "If you could have one conversation with anyone in history, who and why",
     "What does success mean to you personally, not to society",
     "Describe a skill you wish you had and why it matters to you",
     "If you had to teach one lesson to every 18-year-old, what would it be",
+    "Pitch a completely useless invention and try to convince me to buy it",
+    "Explain the concept of the internet to a time traveler from 1850",
+    "Describe your perfect day from the moment you wake up to when you sleep",
+    "What is the most difficult decision you've ever had to make?",
+    "If you could teleport anywhere right now, where would you go and why?",
+    "Argue that a hotdog is, or is not, a sandwich",
+    "What is a popular opinion that you completely disagree with?",
+    "If you had to eat only one meal for the rest of your life, what would it be?",
+    "Describe a time when you completely failed at something, and what you learned",
+    "If animals could talk, which species would be the rudest?",
+    "What is the best piece of advice you have ever received?",
+    "How would you survive a zombie apocalypse using only items in your room?",
+    "If you were a color, what color would you be and why?",
+    "Explain a complex hobby or interest of yours to a 5-year-old",
+    "If you could instantly become an expert in any subject, what would you choose?",
+    "Describe a book or movie that profoundly impacted your worldview",
+    "What is a habit you are trying to build, and why is it so hard?",
+    "If you had unlimited funding to start a charity, what would its mission be?",
+    "What is the most beautiful place you have ever seen with your own eyes?",
+    "If you could redesign the human body, what one change would you make?"
 ]
+
+FREESTYLE_TOPICS = FREESTYLE_SCENARIOS + FREESTYLE_WORDS
 
 # ── Backward compatibility aliases ──────────────────────────────
 # These maintain the old dict/list interfaces so existing code that
@@ -92,6 +142,3 @@ DEBATE_TOPICS = {
     "level2": DEBATE_LEVEL_2_TOPICS,
     "level3": DEBATE_LEVEL_3_TOPICS,
 }
-
-FREESTYLE_WORDS = FREESTYLE_TOPICS
-FREESTYLE_SCENARIOS = FREESTYLE_TOPICS

@@ -8,12 +8,12 @@ No LLM calls. HEDGING_HABIT is computed from stored transcripts since
 the sessions table does not have a confidence_count column.
 """
 
-import sqlite3
-from core.memory import DB_PATH
+from core.db import get_conn
+from core.memory import _use_conn
 from engine.confidence import analyse_confidence
 
 
-def detect_weaknesses(profile: dict) -> list[dict]:
+def detect_weaknesses(profile: dict, *, conn=None) -> list[dict]:
     """
     Detect active communication weaknesses from user profile.
 
@@ -22,6 +22,8 @@ def detect_weaknesses(profile: dict) -> list[dict]:
     profile : dict
         Output from get_user_profile(). Must contain keys:
         last_5_sessions, avg_wpm, avg_fillers, total_sessions
+    conn : connection, optional
+        An existing DB connection to reuse for hedging transcript lookup.
 
     Returns
     -------
@@ -73,7 +75,7 @@ def detect_weaknesses(profile: dict) -> list[dict]:
             })
 
     # ── HEDGING_HABIT: compute from transcripts (last 5 only) ────
-    hedging_avg = _compute_hedging_from_transcripts(sessions)
+    hedging_avg = _compute_hedging_from_transcripts(sessions, conn=conn)
     if hedging_avg > 5:
         if hedging_avg > 12:
             severity = 3
@@ -171,7 +173,7 @@ def format_weakness_summary(weaknesses: list[dict]) -> str:
     return summary
 
 
-def _compute_hedging_from_transcripts(sessions: list[dict]) -> float:
+def _compute_hedging_from_transcripts(sessions: list[dict], *, conn=None) -> float:
     """
     Compute average hedging signals per session by scanning stored
     transcripts from the turns table. Limited to last 5 sessions only.
@@ -186,18 +188,17 @@ def _compute_hedging_from_transcripts(sessions: list[dict]) -> float:
     if not session_ids:
         return 0.0
 
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    with _use_conn(conn) as c:
+        cursor = c.cursor()
 
-    placeholders = ",".join("?" for _ in session_ids)
-    cursor.execute(f"""
-        SELECT session_id, transcript
-        FROM turns
-        WHERE session_id IN ({placeholders})
-        ORDER BY session_id, turn_number
-    """, session_ids)
-    rows = cursor.fetchall()
-    conn.close()
+        placeholders = ",".join("%s" for _ in session_ids)
+        cursor.execute(f"""
+            SELECT session_id, transcript
+            FROM turns
+            WHERE session_id IN ({placeholders})
+            ORDER BY session_id, turn_number
+        """, session_ids)
+        rows = cursor.fetchall()
 
     if not rows:
         return 0.0

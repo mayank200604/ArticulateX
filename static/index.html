@@ -13,60 +13,135 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
-  <link rel="stylesheet" href="/static/style.css?v=5" />
+  <link rel="stylesheet" href="/static/style.css?v=6" />
 </head>
 
 <body>
 
   <!-- ═══════════════════════════════════════════ -->
+  <!-- SCREEN 0 — AUTH                             -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="screen-auth" class="screen">
+    <div class="auth-wrap">
+      <div class="auth-logo">
+        <span class="auth-logo-main">ARTICULATE</span>
+        <span class="auth-logo-x">X</span>
+      </div>
+      <p class="auth-tagline">Authentication Required</p>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-signin" data-tab="signin">SIGN IN</button>
+          <button class="auth-tab" id="tab-register" data-tab="register">REGISTER</button>
+        </div>
+        <div class="auth-tab-line"></div>
+        
+        <form id="auth-form" class="auth-form">
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="auth-username">USERNAME</label>
+              <span class="input-hint">[3+]</span>
+            </div>
+            <input type="text" id="auth-username" required minlength="3" autocomplete="username" placeholder="Enter Username">
+          </div>
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="auth-password">PASSWORD</label>
+              <span class="input-hint">[6+]</span>
+            </div>
+            <input type="password" id="auth-password" required minlength="6" autocomplete="current-password" placeholder="••••••••">
+          </div>
+          <p id="auth-error" class="auth-error hidden"></p>
+          
+          <div class="auth-actions">
+            <button type="submit" id="btn-login" class="btn-auth-primary" formaction="login">ENTER THE ARENA &nbsp;→</button>
+            <button type="submit" id="btn-register" class="btn-auth-primary hidden" formaction="register">CREATE OPERATIVE &nbsp;→</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
   <!-- SCREEN 1 — LANDING                          -->
   <!-- ═══════════════════════════════════════════ -->
   <div id="screen-landing" class="screen active">
-    <div class="landing-left">
-      <div class="landing-logo">
-        <span class="logo-text">Articulate<span class="logo-x">X</span></span>
-      </div>
+    <section class="landing-hero-section">
+      <div class="landing-left">
+        <div class="landing-logo">
+          <span class="logo-text">Articulate<span class="logo-x">X</span></span>
+        </div>
 
-      <div class="landing-hero">
-        <p class="landing-eyebrow">Communication Training &nbsp;·&nbsp; AI Powered</p>
-        <h1 class="landing-headline">
-          <span class="word-reveal">Speak</span>
-          <span class="word-reveal headline-muted">with</span>
-          <span class="word-reveal headline-accent">conviction.</span>
-        </h1>
-        <p class="landing-subtext">
-          Train your fluency, confidence, and composure.<br />
-          Five modes. Real pressure. Honest feedback.
-        </p>
-        <div class="landing-actions">
-          <button id="btn-start-training" class="btn-primary">Start Training</button>
-          <button id="btn-how-it-works" class="btn-ghost">How it works <span class="arrow">→</span></button>
+        <div class="landing-hero">
+          <p class="landing-eyebrow">Communication Training &nbsp;·&nbsp; AI Powered</p>
+          <h1 class="landing-headline">
+            <span class="word-reveal">Speak</span>
+            <span class="word-reveal headline-muted">with</span>
+            <span class="word-reveal headline-accent">conviction.</span>
+          </h1>
+          <p class="landing-subtext">
+            Train your fluency, confidence, and composure.<br />
+            Five modes. Real pressure. Honest feedback.
+          </p>
+          <div class="landing-actions">
+            <button id="btn-start-training" class="btn-primary">Start Training</button>
+            <button id="btn-how-it-works" class="btn-ghost">How it works <span class="arrow">→</span></button>
+          </div>
+        </div>
+
+        <div class="landing-stats">
+          <div class="stat-item">
+            <span id="stat-sessions" class="stat-number">—</span>
+            <span class="stat-label">sessions</span>
+          </div>
+          <div class="stat-dot">·</div>
+          <div class="stat-item">
+            <span id="stat-turns" class="stat-number">—</span>
+            <span class="stat-label">turns practiced</span>
+          </div>
         </div>
       </div>
 
-      <div class="landing-stats">
-        <div class="stat-item">
-          <span id="stat-sessions" class="stat-number">—</span>
-          <span class="stat-label">sessions</span>
-        </div>
-        <div class="stat-dot">·</div>
-        <div class="stat-item">
-          <span id="stat-turns" class="stat-number">—</span>
-          <span class="stat-label">turns practiced</span>
+      <div class="landing-right">
+        <div id="voice-circle-landing" class="voice-circle-container"></div>
+        <div class="landing-radial"></div>
+      </div>
+    </section>
+
+    <section id="landing-features-section" class="landing-features-section">
+      <div class="landing-features-content">
+        <h2 class="features-title">OPERATIONAL PROTOCOL</h2>
+        <p class="features-desc">A high-intensity, AI-powered communication trainer. ArticulateX records your voice in real-time, analyzing your words per minute, filler words, and confidence signals under pressure.</p>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feat-icon" style="color: var(--mode-cal)">01</div>
+            <h3 class="feat-name">Calibration & FreeStyle</h3>
+            <p class="feat-text">Warm up your voice and establish your baseline metrics in a low-pressure environment before entering the arena.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon" style="color: var(--mode-d1)">02</div>
+            <h3 class="feat-name">Dynamic Debates</h3>
+            <p class="feat-text">Argue against an AI opponent across 3 escalating difficulty levels with real-time pushback and dynamic counter-arguments.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon" style="color: var(--mode-d3)">03</div>
+            <h3 class="feat-name">Real-time Interrupts</h3>
+            <p class="feat-text">The AI won't let weak arguments slide. Expect interruptions and high pressure on advanced levels that force you to think on your feet.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon" style="color: var(--mode-weird)">04</div>
+            <h3 class="feat-name">Weird Situations</h3>
+            <p class="feat-text">Improvise and maintain your composure in absurd, unexpected scenarios specifically designed to test your adaptability.</p>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="landing-right">
-      <div id="voice-circle-landing" class="voice-circle-container"></div>
-      <div class="landing-radial"></div>
-    </div>
+    </section>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -74,12 +149,16 @@
   <!-- ═══════════════════════════════════════════ -->
   <nav id="global-nav" class="global-nav hidden">
     <div class="nav-inner">
-      <div class="nav-logo">
-        <span class="logo-text">Articulate<span class="logo-x">X</span></span>
+      <div class="nav-left">
+        <span class="nav-logo-text">ARTICULATE <span class="nav-logo-x">X</span></span>
       </div>
-      <div class="nav-links">
+      <div class="nav-center">
         <button id="nav-home" class="nav-link active-link" data-screen="screen-home">Home</button>
         <button id="nav-progress" class="nav-link" data-screen="screen-dashboard">Progress</button>
+      </div>
+      <div class="nav-right">
+        <span id="nav-username" class="nav-username"></span>
+        <button id="nav-logout" class="nav-link nav-logout-btn">Logout</button>
       </div>
     </div>
   </nav>
@@ -107,45 +186,45 @@
             <div class="mode-nav-text">
               <span class="mode-nav-name">FreeStyle</span>
               <span class="mode-nav-desc">Warm up your voice</span>
+              <span class="lock-condition hidden"></span>
             </div>
             <span class="lock-icon hidden" aria-hidden="true">🔒</span>
-            <span class="lock-condition hidden"></span>
           </button>
           <button class="mode-nav-item" data-mode="debate1" id="mode-btn-debate1">
             <span class="mode-num">02</span>
             <div class="mode-nav-text">
               <span class="mode-nav-name">Debate · Easy</span>
               <span class="mode-nav-desc">Build fluency</span>
+              <span class="lock-condition hidden"></span>
             </div>
             <span class="lock-icon hidden" aria-hidden="true">🔒</span>
-            <span class="lock-condition hidden"></span>
           </button>
           <button class="mode-nav-item" data-mode="debate2" id="mode-btn-debate2">
             <span class="mode-num">03</span>
             <div class="mode-nav-text">
               <span class="mode-nav-name">Debate · Medium</span>
               <span class="mode-nav-desc">Hold your ground</span>
+              <span class="lock-condition hidden"></span>
             </div>
             <span class="lock-icon hidden" aria-hidden="true">🔒</span>
-            <span class="lock-condition hidden"></span>
           </button>
           <button class="mode-nav-item" data-mode="debate3" id="mode-btn-debate3">
             <span class="mode-num">04</span>
             <div class="mode-nav-text">
               <span class="mode-nav-name">Debate · Hard</span>
               <span class="mode-nav-desc">Maximum pressure</span>
+              <span class="lock-condition hidden"></span>
             </div>
             <span class="lock-icon hidden" aria-hidden="true">🔒</span>
-            <span class="lock-condition hidden"></span>
           </button>
           <button class="mode-nav-item" data-mode="weird" id="mode-btn-weird">
             <span class="mode-num">05</span>
             <div class="mode-nav-text">
               <span class="mode-nav-name">Weird Situation</span>
               <span class="mode-nav-desc">React to anything</span>
+              <span class="lock-condition hidden"></span>
             </div>
             <span class="lock-icon hidden" aria-hidden="true">🔒</span>
-            <span class="lock-condition hidden"></span>
           </button>
         </nav>
 
@@ -190,6 +269,12 @@
             <div id="mode-recent-sessions" class="mode-recent-sessions"></div>
 
             <button id="btn-begin-mode" class="btn-begin-mode">Begin This Mode</button>
+          </div>
+
+          <!-- Embedded Daily Quote -->
+          <div id="embedded-daily-quote" class="embedded-quote hidden">
+            <span class="embedded-quote-category" id="daily-quote-category"></span>
+            <div class="embedded-quote-text" id="daily-quote-text"></div>
           </div>
         </div>
       </main>
@@ -347,12 +432,104 @@
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
+  <!-- LEVEL 1 WARNING MODAL                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="level1-warning-modal" class="l3-modal-overlay hidden">
+    <div class="l3-modal-card l3-card-warning" style="border-top: 4px solid var(--mode-d1);">
+      <div class="l3-modal-header">
+        <span class="l3-modal-icon" style="color: var(--mode-d1);">ℹ</span>
+        <h2 class="l3-modal-title" style="color: var(--text-1);">LEVEL 1 EXPECTATIONS</h2>
+        <span class="l3-modal-badge" style="color: var(--mode-d1); border-color: var(--mode-d1);">FLUENCY FOCUS</span>
+      </div>
+      <p class="l3-modal-intro">Acknowledge the following before proceeding with this session.</p>
+      <ul class="l3-modal-list">
+        <li><span class="l3-list-marker" style="color: var(--mode-d1);">01.</span> The AI will never simply agree with your point, but it will stay <strong>polite and encouraging</strong> while challenging you.</li>
+        <li><span class="l3-list-marker" style="color: var(--mode-d1);">02.</span> This level has <strong>zero forced interruptions</strong> — you can speak at your own pace.</li>
+        <li><span class="l3-list-marker" style="color: var(--mode-d1);">03.</span> Use this level to <strong>build fluency without pressure</strong>.</li>
+      </ul>
+      <button id="btn-l1-dismiss" class="btn-l3-dismiss" style="color: var(--mode-d1); border-color: var(--mode-d1);">GOT IT, LET'S BEGIN</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LEVEL 2 WARNING MODAL                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="level2-warning-modal" class="l3-modal-overlay hidden">
+    <div class="l3-modal-card l3-card-warning" style="border-top: 4px solid var(--mode-d2);">
+      <div class="l3-modal-header">
+        <span class="l3-modal-icon" style="color: var(--mode-d2);">⚠</span>
+        <h2 class="l3-modal-title" style="color: var(--text-1);">LEVEL 2 EXPECTATIONS</h2>
+        <span class="l3-modal-badge" style="color: var(--mode-d2); border-color: var(--mode-d2);">MODERATE PRESSURE</span>
+      </div>
+      <p class="l3-modal-intro">Acknowledge the following before proceeding with this session.</p>
+      <ul class="l3-modal-list">
+        <li><span class="l3-list-marker" style="color: var(--mode-d2);">01.</span> The AI will never simply agree with your point, and it will push back <strong>competitively — but fairly</strong>.</li>
+        <li><span class="l3-list-marker" style="color: var(--mode-d2);">02.</span> Expect interruptions roughly <strong>1 in 4 times</strong> a rule is triggered — noticeably more pressure than Level 1.</li>
+        <li><span class="l3-list-marker" style="color: var(--mode-d2);">03.</span> Stay clear and concise; this level rewards <strong>holding your ground under moderate pressure</strong>.</li>
+      </ul>
+      <button id="btn-l2-dismiss" class="btn-l3-dismiss" style="color: var(--mode-d2); border-color: var(--mode-d2);">GOT IT, LET'S BEGIN</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LEVEL 3 WARNING MODAL                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="level3-warning-modal" class="l3-modal-overlay hidden">
+    <div class="l3-modal-card l3-card-warning">
+      <div class="l3-modal-header">
+        <span class="l3-modal-icon">⚠</span>
+        <h2 class="l3-modal-title">LEVEL 3 WARNING</h2>
+        <span class="l3-modal-badge">EYE. SER. AI</span>
+      </div>
+      <p class="l3-modal-intro">Acknowledge the following operational constraints before proceeding with this session.</p>
+      <ul class="l3-modal-list">
+        <li><span class="l3-list-marker">01.</span> It won't end on its own — <strong>you decide when to stop.</strong></li>
+        <li><span class="l3-list-marker">02.</span> The AI will <strong>never concede a point</strong>, no matter how strong your argument is.</li>
+        <li><span class="l3-list-marker">03.</span> Lead with your point immediately. <strong>Wandering before you get there will trigger an interrupt.</strong></li>
+      </ul>
+      <button id="btn-l3-dismiss" class="btn-l3-dismiss">GOT IT, LET'S BEGIN</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- INVISIBLE AUDIENCE MODAL                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="audience-effect-modal" class="l3-modal-overlay hidden">
+    <div class="l3-modal-card audience-card">
+      <div class="audience-header">
+        <span class="audience-badge">PANEL SIMULATION</span>
+        <h2 class="audience-title">Hiring Panel<br>Evaluation</h2>
+        <p class="audience-desc">
+          This session is being evaluated as part of a hiring panel simulation. Speak as if your performance is being assessed for a role.
+        </p>
+      </div>
+      <div class="audience-criteria">
+        <span class="audience-criteria-label">EVALUATION CRITERIA</span>
+        <div class="audience-criterion">
+          <span class="criterion-icon">📐</span>
+          <div><strong>Structural Integrity</strong><br><span class="criterion-sub">Structure your arguments clearly — every sentence matters.</span></div>
+        </div>
+        <div class="audience-criterion">
+          <span class="criterion-icon">🚫</span>
+          <div><strong>Filler Elimination</strong><br><span class="criterion-sub">Eliminate filler words — they will be noticed.</span></div>
+        </div>
+        <div class="audience-criterion">
+          <span class="criterion-icon">🎯</span>
+          <div><strong>Vocal Conviction</strong><br><span class="criterion-sub">Speak with conviction — confidence is being measured.</span></div>
+        </div>
+      </div>
+      <button id="btn-audience-dismiss" class="btn-audience-dismiss">UNDERSTOOD, BEGIN EVALUATION &nbsp;→</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
   <!-- SCREEN 5 — FEEDBACK REPORT                  -->
   <!-- ═══════════════════════════════════════════ -->
   <div id="screen-report" class="screen">
 
     <!-- Top strip -->
     <div class="report-strip" id="report-strip">
+      <button id="btn-report-back" class="back-link">← Back</button>
       <span id="rstrip-mode" class="rstrip-mode"></span>
       <span class="rstrip-sep">·</span>
       <span id="rstrip-topic" class="rstrip-topic"></span>
@@ -564,6 +741,41 @@
           <span class="dash-empty-arrow">↑ head home to begin</span>
         </div>
       </div>
+      </div>
+
+      <!-- Voice Identity Card (hidden until earned) -->
+      <div class="voice-identity-wrap hidden" id="dash-voice-identity">
+        <div class="voice-identity-card">
+          <span class="voice-identity-eyebrow">YOUR COMMUNICATION IDENTITY</span>
+          <h2 class="voice-identity-label" id="voice-identity-label"></h2>
+          <p class="voice-identity-desc" id="voice-identity-desc"></p>
+        </div>
+      </div>
+
+      <!-- Milestone Narrative (hidden until earned) -->
+      <div class="milestone-wrap hidden" id="dash-milestone-wrap">
+        <div class="milestone-card">
+          <span class="milestone-eyebrow">YOUR JOURNEY</span>
+          <p class="milestone-narrative" id="milestone-narrative"></p>
+          <span class="milestone-session-count" id="milestone-session-count"></span>
+        </div>
+        <div class="milestone-past-wrap hidden" id="milestone-past-wrap">
+          <button class="milestone-toggle" id="milestone-toggle">View past milestones ▾</button>
+          <div class="milestone-past-list hidden" id="milestone-past-list"></div>
+        </div>
+      </div>
+
+      <!-- Recurring Patterns Dashboard -->
+      <div class="dash-patterns-wrap" id="dash-patterns-wrap">
+        <div class="dash-patterns-header">
+          <h2 class="dash-patterns-title">Recurring Delivery Patterns</h2>
+          <p class="dash-patterns-subtitle">Analyzed from your recent sessions</p>
+        </div>
+        <div id="dash-patterns-list" class="dash-patterns-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -612,7 +824,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js?v=2" defer></script>
+  <script src="/static/app.js?v=3" defer></script>
 </body>
 
 </html>

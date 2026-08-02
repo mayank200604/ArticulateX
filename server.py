@@ -22,6 +22,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 from dotenv import load_dotenv
+import bcrypt
+import psycopg2
+import psycopg2.errors
+from datetime import datetime
 
 os.makedirs("audio_snapshots", exist_ok=True)
 
@@ -32,6 +36,7 @@ from core.stt import transcribe, start_streaming_session, \
     stream_audio_chunk, stop_streaming_session, decode_audio_bytes
 from core.tts import speak_to_file, TTS_OUTPUT_PATH
 from core.analyser import analyse
+from core.db import init_pool, get_conn
 from core.memory import (init_db, create_session, save_turn,
     update_session_stats, get_all_sessions, get_progression_report,
     get_unlock_state, get_calibration_data)
@@ -40,6 +45,9 @@ from core.utils import is_audio_valid
 from core.user_memory import get_user_profile
 from core.weakness_detector import detect_weaknesses, format_weakness_summary
 from core.pattern_discovery import discover_patterns
+from core.identity_narrative import generate_voice_identity, \
+    generate_milestone_narrative
+from core.memory import get_voice_identity, get_milestone_narratives
 from engine.conversation import (get_debate_response,
     get_freestyle_response, get_weird_situation_response,
     get_calibration_response)
@@ -51,8 +59,10 @@ from engine.debate import (DEBATE_CONFIG, get_ai_side,
 from engine.freestyle import get_freestyle_prompt
 from engine.weird_situation import get_weird_situation
 from engine.topics import (DEBATE_LEVEL_1_TOPICS, DEBATE_LEVEL_2_TOPICS,
-    DEBATE_LEVEL_3_TOPICS, FREESTYLE_TOPICS)
+    DEBATE_LEVEL_3_TOPICS, FREESTYLE_TOPICS, FREESTYLE_WORDS, FREESTYLE_SCENARIOS)
+from core.daily_quote import get_daily_quote
 
+init_pool()
 init_db()
 
 # ── Calibration topics (hardcoded, gentle) ───────────────────
@@ -71,6 +81,17 @@ CALIBRATION_TOPICS = [
 
 app = FastAPI(title="ArticulateX")
 
+from starlette.middleware.sessions import SessionMiddleware
+
+_session_secret = os.getenv("SESSION_SECRET")
+if not _session_secret:
+    raise RuntimeError(
+        "SESSION_SECRET environment variable is not set. "
+        "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\" "
+        "and add it to your .env file."
+    )
+app.add_middleware(SessionMiddleware, secret_key=_session_secret)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -85,6 +106,32 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # In-memory session store
 SESSIONS: dict[str, dict] = {}
+
+# ── Background task tracking ─────────────────────────────────────────
+# Prevents fire-and-forget asyncio tasks from being GC'd mid-execution.
+_background_tasks: set[asyncio.Task] = set()
+
+
+def _persist_turn(sid: int, turn_data: dict, turns_snapshot: list) -> None:
+    """Combined DB write: save turn then update session stats.
+
+    Runs in a background thread via asyncio.to_thread().
+    Guarantees save_turn() completes before update_session_stats()
+    and halves the connection-pool overhead per turn.
+    """
+    try:
+        save_turn(sid, turn_data)
+        update_session_stats(sid, turns_snapshot)
+    except Exception as e:
+        print(f"[DB-ASYNC-ERROR] Failed to persist turn for session {sid}: {e}")
+
+
+def _create_background_task(coro) -> asyncio.Task:
+    """Create a tracked background task that won't be GC'd."""
+    task = asyncio.create_task(coro)
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+    return task
 
 
 def new_session_token() -> str:
@@ -109,6 +156,80 @@ async def get_tts_audio():
     raise HTTPException(status_code=404, detail="No audio")
 
 
+# ── Auth & Users ─────────────────────────────────────────────────
+def get_current_user(request: Request) -> int:
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Not logged in")
+    return user_id
+
+class AuthRequest(BaseModel):
+    username: str
+    password: str
+
+@app.post("/api/register")
+async def register(req: AuthRequest, request: Request):
+    if len(req.username) < 3 or len(req.password) < 6:
+        raise HTTPException(400, "Username min 3 chars, password min 6 chars")
+    
+    # bcrypt.gensalt() uses default cost factor 12
+    hashed = bcrypt.hashpw(req.password.encode(), bcrypt.gensalt()).decode()
+    
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO users (username, password_hash, created_at) VALUES (%s, %s, %s) RETURNING id",
+                (req.username, hashed, datetime.now().isoformat())
+            )
+            user_id = cursor.fetchone()[0]
+        except psycopg2.errors.UniqueViolation:
+            conn.rollback()
+            raise HTTPException(409, "Username already taken")
+    
+    request.session["user_id"] = user_id
+    return JSONResponse({"ok": True, "username": req.username})
+
+@app.post("/api/login")
+async def login(req: AuthRequest, request: Request):
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, password_hash FROM users WHERE username = %s", (req.username,))
+        row = cursor.fetchone()
+    
+    if not row or not bcrypt.checkpw(req.password.encode(), row[1].encode()):
+        raise HTTPException(401, "Invalid username or password")
+    
+    request.session["user_id"] = row[0]
+    return JSONResponse({"ok": True, "username": req.username})
+
+@app.get("/api/me")
+async def me(request: Request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return JSONResponse({"logged_in": False})
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT username FROM users WHERE id = %s", (user_id,))
+        row = cursor.fetchone()
+    if not row:
+        return JSONResponse({"logged_in": False})
+    return JSONResponse({"logged_in": True, "username": row[0]})
+
+@app.post("/api/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return JSONResponse({"ok": True})
+
+@app.get("/api/daily_quote")
+async def daily_quote(request: Request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(401, "Not logged in")
+    data = get_daily_quote(user_id)
+    return JSONResponse(data)
+
+
 # ── Pydantic models ──────────────────────────────────────────────
 class SetupRequest(BaseModel):
     mode: str            # freestyle|debate1|debate2|debate3|weird|calibration
@@ -130,25 +251,63 @@ class FeedbackRequest(BaseModel):
 
 
 # ── Session setup ────────────────────────────────────────────────
+class StartSessionRequest(BaseModel):
+    session_token: str
+
+@app.post("/api/start-session")
+async def start_session(req: StartSessionRequest, request: Request):
+    """
+    Called when user actually begins the session (screen transition).
+    Creates the database record for the session.
+    """
+    user_id = get_current_user(request)
+    token = req.session_token
+    if token in SESSIONS:
+        sess = SESSIONS[token]
+        if sess.get("session_id") is None:
+            # Recompute mode_display for DB (e.g. FreeStyle, Debate Level 1)
+            mode_display = {
+                "freestyle": "FreeStyle",
+                "debate1":   "Debate Level 1",
+                "debate2":   "Debate Level 2",
+                "debate3":   "Debate Level 3",
+                "weird":     "Weird Situation",
+                "calibration": "Calibration"
+            }.get(sess["mode"], sess["mode"])
+            
+            sess["session_id"] = create_session(mode=mode_display, topic=sess["topic"], user_id=user_id)
+            print(f"[START] Session DB row created for: {sess['topic']}")
+    return JSONResponse({"status": "ok"})
+
+
 @app.post("/api/setup")
-async def setup_session(req: SetupRequest):
+async def setup_session(req: SetupRequest, request: Request):
     """
     Called when user clicks BEGIN SESSION.
     Creates a new session in DB and returns session token.
     """
+    user_id = get_current_user(request)
     token = new_session_token()
+
+    # ── Weird Situation mode is permanently disabled ──────────
+    if req.mode == "weird":
+        raise HTTPException(
+            status_code=403,
+            detail="Weird Situation mode is not yet available. "
+                   "It will be unlocked in a future update."
+        )
 
     # ── Calibration mode ─────────────────────────────────────
     if req.mode == "calibration":
         topic = random.choice(CALIBRATION_TOPICS)
-        session_id = create_session(mode="Calibration", topic=topic)
+        # session_id will be created during /api/start-session
         SESSIONS[token] = {
             "mode": "calibration",
             "level": 0,
             "topic": topic,
             "user_side": "",
             "ai_side": "",
-            "session_id": session_id,
+            "session_id": None, # Will be created in /api/start-session
             "session_turns": [],
             "confidence_data": [],
             "history": [],
@@ -192,7 +351,12 @@ async def setup_session(req: SetupRequest):
         elif req.mode == "debate3":
             topic = random.choice(DEBATE_LEVEL_3_TOPICS)
         elif req.mode == "freestyle":
-            topic = random.choice(FREESTYLE_TOPICS)
+            if req.freestyle_type == "word":
+                topic = random.choice(FREESTYLE_WORDS)
+            elif req.freestyle_type == "scenario":
+                topic = random.choice(FREESTYLE_SCENARIOS)
+            else:
+                topic = random.choice(FREESTYLE_TOPICS)
         elif req.mode == "weird":
             _, content, description = get_weird_situation()
             topic = description
@@ -209,8 +373,8 @@ async def setup_session(req: SetupRequest):
         "weird":     "Weird Situation",
     }.get(req.mode, req.mode)
 
-    session_id = create_session(mode=mode_display, topic=topic)
-
+    # session_id will be created in /api/start-session
+    
     # Store session state
     SESSIONS[token] = {
         "mode": req.mode,
@@ -218,7 +382,7 @@ async def setup_session(req: SetupRequest):
         "topic": topic,
         "user_side": user_side,
         "ai_side": ai_side,
-        "session_id": session_id,
+        "session_id": None,
         "session_turns": [],
         "confidence_data": [],
         "history": [],
@@ -236,27 +400,38 @@ async def setup_session(req: SetupRequest):
     }
 
     # ── Data Intelligence Layer (< 200ms, no LLM) ───────────────
-    profile = get_user_profile(token)
-    
-    # Store session number based on completed sessions + 1
-    # Calibration sessions do not increment the count
-    session_number = profile.get("total_sessions", 0) + 1
-    SESSIONS[token]["session_number"] = session_number
+    with get_conn() as conn_setup:
+        profile = get_user_profile(user_id, conn=conn_setup)
 
-    weaknesses = detect_weaknesses(profile)
-    weakness_summary = format_weakness_summary(weaknesses)
+        # Store session number based on completed sessions + 1
+        # Calibration sessions do not increment the count
+        session_number = profile.get("total_sessions", 0) + 1
+        SESSIONS[token]["session_number"] = session_number
 
-    SESSIONS[token]["user_profile"] = profile
-    SESSIONS[token]["weaknesses"] = weaknesses
-    SESSIONS[token]["weakness_summary"] = weakness_summary
+        weaknesses = detect_weaknesses(profile, conn=conn_setup)
+        weakness_summary = format_weakness_summary(weaknesses)
 
-    if weakness_summary:
-        print(f"[SETUP] User weaknesses: {weakness_summary}")
-    else:
-        print(f"[SETUP] No historical weaknesses detected "
-              f"(total sessions: {profile.get('total_sessions', 0)})")
+        SESSIONS[token]["user_profile"] = profile
+        SESSIONS[token]["weaknesses"] = weaknesses
+        SESSIONS[token]["weakness_summary"] = weakness_summary
 
-    silence_map = {1: 4.0, 2: 3.0, 3: 2.0, 0: 3.0}
+        if weakness_summary:
+            print(f"[SETUP] User weaknesses: {weakness_summary}")
+        else:
+            print(f"[SETUP] No historical weaknesses detected "
+                  f"(total sessions: {profile.get('total_sessions', 0)})")
+
+        silence_map = {1: 4.0, 2: 3.0, 3: 2.0, 0: 3.0}
+
+        debate3_count = 0
+        if req.mode == "debate3":
+            cur_d3 = conn_setup.cursor()
+            cur_d3.execute(
+                "SELECT COUNT(*) FROM sessions "
+                "WHERE LOWER(mode) LIKE '%%debate%%3%%' AND total_turns > 0 AND user_id = %s",
+                (user_id,)
+            )
+            debate3_count = cur_d3.fetchone()[0]
 
     return JSONResponse({
         "token": token,
@@ -266,6 +441,7 @@ async def setup_session(req: SetupRequest):
         "level": req.level,
         "mode": req.mode,
         "silence_seconds": silence_map.get(req.level, 3.0),
+        "debate3_session_count": debate3_count,
     })
 
 
@@ -285,14 +461,16 @@ async def get_topics(level: int = 1):
 
 # ── Unlock state ─────────────────────────────────────────────────
 @app.get("/api/unlock-state")
-async def unlock_state():
+async def unlock_state(request: Request):
     """Returns current progressive unlock state for all modes."""
-    return JSONResponse(get_unlock_state())
+    user_id = get_current_user(request)
+    return JSONResponse(get_unlock_state(user_id))
 
 
 # ── Calibration report ───────────────────────────────────────────
 @app.post("/api/calibration-report")
-async def calibration_report(req: FeedbackRequest):
+async def calibration_report(req: FeedbackRequest, request: Request):
+    user_id = get_current_user(request)
     """
     Generate calibration report with baseline metrics and
     level recommendation. Separate from /api/feedback.
@@ -334,8 +512,9 @@ async def get_weird():
 
 # ── Dashboard data ───────────────────────────────────────────────
 @app.get("/api/dashboard")
-async def get_dashboard():
-    sessions = get_all_sessions()
+async def get_dashboard(request: Request):
+    user_id = get_current_user(request)
+    sessions = await asyncio.to_thread(get_all_sessions, user_id)
     if not sessions:
         return JSONResponse({
             "total_sessions": 0,
@@ -396,6 +575,16 @@ async def get_dashboard():
 
     last_date = sessions[0][1][:10] if sessions and sessions[0][1] else "—"
 
+    # Run progression + unlock on a single shared connection
+    def _dashboard_db(uid):
+        with get_conn() as conn:
+            return {
+                "progression": get_progression_report(uid, conn=conn),
+                "unlock_state": get_unlock_state(uid, conn=conn),
+            }
+
+    db_data = await asyncio.to_thread(_dashboard_db, user_id)
+
     return JSONResponse({
         "total_sessions": total_sessions,
         "total_turns": total_turns,
@@ -404,9 +593,53 @@ async def get_dashboard():
         "sessions": session_data,
         "streak": streak,
         "last_date": last_date,
-        "progression": get_progression_report(),
-        "unlock_state": get_unlock_state(),
+        "progression": db_data["progression"],
+        "unlock_state": db_data["unlock_state"],
     })
+
+
+# ── Pattern Dashboard ────────────────────────────────────────────
+@app.get("/api/patterns")
+async def get_patterns(request: Request):
+    user_id = get_current_user(request)
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM sessions WHERE total_turns > 0 AND user_id = %s", (user_id,))
+        session_count = cursor.fetchone()[0]
+        
+        cursor.execute("""
+            SELECT DISTINCT pattern_text, MAX(discovered_at) as latest
+            FROM user_patterns
+            WHERE user_id = %s
+            GROUP BY pattern_text
+            ORDER BY latest DESC
+            LIMIT 5
+        """, (user_id,))
+        rows = cursor.fetchall()
+    
+    return JSONResponse({
+        "patterns": [row[0] for row in rows],
+        "enough_sessions": session_count >= 5,
+    })
+
+
+# ── Voice Identity ───────────────────────────────────────────────
+@app.get("/api/voice-identity")
+async def api_get_voice_identity(request: Request):
+    """Return the user's voice identity, or null if not yet earned."""
+    user_id = get_current_user(request)
+    identity = get_voice_identity(user_id)
+    return JSONResponse({"identity": identity})
+
+
+# ── Milestone Narratives ─────────────────────────────────────────
+@app.get("/api/milestones")
+async def api_get_milestones(request: Request):
+    """Return all milestone narratives for the user, most recent first."""
+    user_id = get_current_user(request)
+    milestones = get_milestone_narratives(user_id)
+    return JSONResponse({"milestones": milestones})
 
 
 # ── Submit turn (main pipeline) ──────────────────────────────────
@@ -574,10 +807,10 @@ async def submit_turn(req: TurnRequest, request: Request = None):
 
     # ── Audio Snapshot (Before and After) ──
     if turn_number == 0:
-        asyncio.create_task(
+        _create_background_task(
             asyncio.to_thread(
                 check_and_save_snapshot,
-                token,
+                sess["session_id"],
                 sess.get("session_number", 0),
                 raw_bytes  # Use raw base64-decoded bytes
             )
@@ -594,8 +827,12 @@ async def submit_turn(req: TurnRequest, request: Request = None):
 
     sid = sess.get("session_id")
     if sid and sid > 0:
-        save_turn(sid, turn_data)
-        update_session_stats(sid, sess["session_turns"])
+        _create_background_task(
+            asyncio.to_thread(
+                _persist_turn, sid, turn_data,
+                sess["session_turns"][:]
+            )
+        )
 
     return JSONResponse({
         "transcript": transcript,
@@ -614,7 +851,8 @@ async def submit_turn(req: TurnRequest, request: Request = None):
 
 # ── Generate feedback ────────────────────────────────────────────
 @app.post("/api/feedback")
-async def get_feedback(req: FeedbackRequest):
+async def get_feedback(req: FeedbackRequest, request: Request):
+    user_id = get_current_user(request)
     token = req.session_token
     if token not in SESSIONS:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -683,7 +921,7 @@ async def get_feedback(req: FeedbackRequest):
     mode = sess["mode"]
     level = sess["level"]
     if mode in ("debate1", "debate2", "debate3"):
-        unlock = get_unlock_state()
+        unlock = get_unlock_state(user_id)
         if mode == "debate1" and avg_fil < 3 and avg_wpm > 120 and unlock["debate2"]:
             next_recommendation = "You are ready for Level 2 — try it next session."
         elif mode == "debate2" and avg_fil < 2 and avg_wpm > 130 and unlock["debate3"]:
@@ -705,20 +943,32 @@ async def get_feedback(req: FeedbackRequest):
         "topic": sess["topic"],
         "level": sess["level"],
         "next_recommendation": next_recommendation,
-        "milestone_playback": get_milestone_snapshots(token, sess["session_number"]),
+        "milestone_playback": get_milestone_snapshots(sess["session_id"], sess["session_number"]),
     })
 
     # ── Trigger async pattern discovery (background, non-blocking) ─
-    asyncio.get_event_loop().create_task(
-        asyncio.to_thread(discover_patterns, token)
+    _create_background_task(
+        asyncio.to_thread(discover_patterns, token, user_id)
     )
+
+    # ── Trigger async voice identity + milestone narrative generation ─
+    _create_background_task(
+        asyncio.to_thread(generate_voice_identity, user_id)
+    )
+    if sess.get("session_number", 0) > 0 and sess["session_number"] % 10 == 0:
+        _create_background_task(
+            asyncio.to_thread(
+                generate_milestone_narrative, user_id, sess["session_number"]
+            )
+        )
 
     return resp
 
 
 # ── Play spoken summary ──────────────────────────────────────────
 @app.post("/api/play-summary")
-async def play_summary(req: FeedbackRequest):
+async def play_summary(req: FeedbackRequest, request: Request):
+    user_id = get_current_user(request)
     token = req.session_token
     if token not in SESSIONS:
         raise HTTPException(status_code=404)
@@ -732,7 +982,8 @@ async def play_summary(req: FeedbackRequest):
 
 # ── Play full report ─────────────────────────────────────────────
 @app.post("/api/play-report")
-async def play_report(req: FeedbackRequest):
+async def play_report(req: FeedbackRequest, request: Request):
+    user_id = get_current_user(request)
     token = req.session_token
     if token not in SESSIONS:
         raise HTTPException(status_code=404)
@@ -781,8 +1032,8 @@ _INTERRUPT_SCORE_THRESHOLD = 0.6
 # transcript lag at high speaking speeds.
 _WORD_OVERLOAD_THRESHOLDS = {
     1: 60,   # Level 1 — lenient
-    2: 45,   # Level 2 — moderate
-    3: 35,   # Level 3 — aggressive
+    2: 55,   # Level 2 — moderate
+    3: 45,   # Level 3 — aggressive
 }
 _WORD_OVERLOAD_DEFAULT = 50  # fallback for non-debate / unknown level
 
@@ -843,7 +1094,7 @@ def evaluate_interrupt_weighted(
                      (used for interrupt message selection)
 
     The word_overload threshold is level-dependent:
-    L1=60, L2=45, L3=35 words.
+    L1=60, L2=55, L3=45 words.
     """
     breached: dict[str, bool] = {
         "word_overload": False,
@@ -898,13 +1149,10 @@ def evaluate_interrupt_weighted(
 
     breached_names = [r for r, b in breached.items() if b]
     if breached_names:
-        penalty_note = ""
-        if last_interrupt_rule and last_interrupt_rule in breached_names:
-            penalty_note = f" (repeat penalty on {last_interrupt_rule})"
         print(
             f"[WS-INT] Weighted score: {score:.2f} "
             f"(threshold={_INTERRUPT_SCORE_THRESHOLD}) "
-            f"breached={breached_names}{penalty_note}"
+            f"breached={breached_names}"
         )
 
     return breached, score, best_rule
@@ -1130,10 +1378,10 @@ async def websocket_stt(ws: WebSocket):
 
                                 # ── Audio Snapshot (Before and After) ──
                                 if sess["turn_number"] == 0:
-                                    asyncio.create_task(
+                                    _create_background_task(
                                         asyncio.to_thread(
                                             check_and_save_snapshot,
-                                            token,
+                                            sess["session_id"],
                                             sess.get("session_number", 0),
                                             raw_pcm
                                         )
@@ -1156,9 +1404,11 @@ async def websocket_stt(ws: WebSocket):
 
                                 sid = sess.get("session_id")
                                 if sid and sid > 0:
-                                    save_turn(sid, turn_data)
-                                    update_session_stats(
-                                        sid, sess["session_turns"]
+                                    _create_background_task(
+                                        asyncio.to_thread(
+                                            _persist_turn, sid, turn_data,
+                                            sess["session_turns"][:]
+                                        )
                                     )
 
                                 # ── Send interrupt to frontend ───
@@ -1211,41 +1461,44 @@ async def get_snapshot_audio(filename: str):
     return FileResponse(file_path, media_type="audio/wav")
 
 
-def check_and_save_snapshot(session_token: str, session_number: int, audio_data: bytes):
+def check_and_save_snapshot(session_id: int, session_number: int, audio_data: bytes):
     """
-    Save the raw audio from the first turn if this is session 1
+    Save a proper WAV from the first turn if this is session 1
     or a 10th session milestone (10, 20, 30...).
+    Uses the persistent database session_id for filenames so
+    before/after snapshots can be matched across sessions.
     Runs asynchronously via asyncio.to_thread().
     """
     try:
         # Check if we need to record a snapshot for this session
         if session_number == 1 or session_number % 10 == 0:
-            user_identifier = session_token[:8]
-            filename = f"{user_identifier}session{session_number}.wav"
+            filename = f"session_{session_id}.wav"
             file_path = os.path.join("audio_snapshots", filename)
 
             # Never overwrite an existing snapshot
             if not os.path.exists(file_path):
-                # Write the raw bytes directly
-                with open(file_path, "wb") as f:
-                    f.write(audio_data)
+                # Decode to float32 numpy array, then write proper WAV
+                audio_array, sr = decode_audio_bytes(audio_data)
+                if audio_array.ndim > 1:
+                    audio_array = audio_array[:, 0]
+                sf.write(file_path, audio_array, sr)
                 print(f"[SNAPSHOT] Saved milestone snapshot: {filename}")
     except Exception as exc:
         print(f"[SNAPSHOT] Failed to save snapshot: {exc}")
 
 
-def get_milestone_snapshots(session_token: str, session_number: int) -> dict | None:
+def get_milestone_snapshots(session_id: int, session_number: int) -> dict | None:
     """
     Return before and after URLs if this session completes a milestone.
+    Uses persistent session_id for filename matching.
     Example: For session 10, before = session 1, after = session 10.
              For session 20, before = session 10, after = session 20.
     """
     if session_number > 0 and session_number % 10 == 0:
-        user_identifier = session_token[:8]
         before_num = 1 if session_number == 10 else session_number - 10
-        before_filename = f"{user_identifier}session{before_num}.wav"
-        after_filename = f"{user_identifier}session{session_number}.wav"
-        
+        before_filename = f"session_{session_id - (session_number - before_num)}.wav"
+        after_filename = f"session_{session_id}.wav"
+
         before_path = os.path.join("audio_snapshots", before_filename)
         after_path = os.path.join("audio_snapshots", after_filename)
 

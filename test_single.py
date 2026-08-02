@@ -172,7 +172,6 @@ def run_feature_tests():
         evaluate_interrupt_weighted,
         _INTERRUPT_SCORE_THRESHOLD,
         _RULE_WEIGHTS,
-        _REPEAT_PENALTY,
     )
 
     passed = 0
@@ -273,59 +272,12 @@ def run_feature_tests():
     print()
     print("  ── Feature 2: History-Aware Rule Switching ──")
     print()
-
-    # Test 2a: Without repeat penalty, word_overload+filler_overload = 0.8
-    _, score_no_penalty, _ = evaluate_interrupt_weighted(
-        transcript_long_fillers, last_interrupt_rule=None
-    )
-    check(
-        "No repeat penalty → full score",
-        score_no_penalty >= 0.8 - 0.01,
-        f"score={score_no_penalty:.2f}"
-    )
-
-    # Test 2b: With repeat penalty on word_overload → word_overload weight
-    #          drops 0.4→0.2, total = 0.2 + 0.4 = 0.6 (still crosses)
-    _, score_with_penalty, top = evaluate_interrupt_weighted(
-        transcript_long_fillers, last_interrupt_rule="word_overload"
-    )
-    check(
-        "Repeat penalty on word_overload reduces score",
-        score_with_penalty < score_no_penalty,
-        f"score dropped {score_no_penalty:.2f} → {score_with_penalty:.2f}"
-    )
-    check(
-        "Top rule shifts away from penalised rule",
-        top == "filler_overload",
-        f"top_rule={top} (expected filler_overload)"
-    )
-
-    # Test 2c: With repeat penalty on filler_overload → filler weight
-    #          drops 0.4→0.2, total = 0.4 + 0.2 = 0.6 (still crosses)
-    _, score_pen_filler, top2 = evaluate_interrupt_weighted(
-        transcript_long_fillers, last_interrupt_rule="filler_overload"
-    )
-    check(
-        "Repeat penalty on filler_overload reduces score",
-        score_pen_filler < score_no_penalty,
-        f"score dropped {score_no_penalty:.2f} → {score_pen_filler:.2f}"
-    )
-    check(
-        "Top rule shifts to word_overload when filler penalised",
-        top2 == "word_overload",
-        f"top_rule={top2} (expected word_overload)"
-    )
-
-    # Test 2d: Penalty can drop score BELOW threshold
-    #          filler_overload only (0.4) with repeat → 0.4-0.2=0.2 < 0.6
-    _, score_single_pen, _ = evaluate_interrupt_weighted(
-        transcript_fillers_only, last_interrupt_rule="filler_overload"
-    )
-    check(
-        "Single rule + repeat penalty → stays below threshold",
-        score_single_pen < _INTERRUPT_SCORE_THRESHOLD,
-        f"score={score_single_pen:.2f}"
-    )
+    # DEPRECATED: The repeat penalty system (_REPEAT_PENALTY and
+    # last_interrupt_rule parameter) was removed from server.py.
+    # evaluate_interrupt_weighted() no longer accepts a
+    # last_interrupt_rule kwarg. These tests are skipped.
+    print("    ⊘ SKIPPED: Repeat penalty system was removed from server.py")
+    print("               (last_interrupt_rule parameter no longer exists)")
 
     # ── Feature 3: Dynamic Pressure Adjustment ──────────────────
     print()

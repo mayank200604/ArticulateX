@@ -1,7 +1,12 @@
 .env
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
 output_audio.wav
 tts_output.wav
 voice_sample.wav
-articulate.db
+eval_reports/
+evaluation_cache.json
+test_results*.json
+audio_snapshots/

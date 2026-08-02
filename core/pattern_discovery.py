@@ -11,11 +11,10 @@ via asyncio.to_thread(). It must never block the main session flow.
 Sprint 1: saves patterns to DB only — no dashboard display yet.
 """
 
-import sqlite3
 import json
 from datetime import datetime
 
-from core.memory import DB_PATH
+from core.db import get_conn
 from llm import call_llm
 
 
@@ -46,25 +45,27 @@ Example: ["loses structure when challenged", "speeds up when uncertain"]
 No explanation. No commentary. Just the JSON array."""
 
 
-def discover_patterns(session_token: str) -> None:
+def discover_patterns(session_token: str, user_id: int = None) -> None:
     """
     Discover recurring communication patterns from recent sessions.
 
     This function is designed to be called via asyncio.to_thread()
     and must never be awaited directly in the request path.
 
-    It collects transcripts from the last 5 completed sessions,
-    sends them to the LLM for pattern analysis, and saves each
-    discovered pattern to the user_patterns SQLite table.
+    It collects transcripts from the last 5 completed sessions
+    for the given user, sends them to the LLM for pattern analysis,
+    and saves each discovered pattern to the user_patterns table.
 
     Parameters
     ----------
     session_token : str
         The session token that triggered this discovery.
-        Used as a reference when saving patterns.
+        Stored as a reference field in user_patterns.
+    user_id : int, optional
+        The authenticated user's ID. All queries scoped to this user.
     """
     try:
-        transcripts = _fetch_recent_transcripts()
+        transcripts = _fetch_recent_transcripts(user_id)
 
         if not transcripts:
             print("[PATTERNS] No transcripts found — skipping discovery")
@@ -84,7 +85,7 @@ def discover_patterns(session_token: str) -> None:
         patterns = _parse_patterns(response)
 
         if patterns:
-            _save_patterns(session_token, patterns)
+            _save_patterns(session_token, patterns, user_id)
             print(f"[PATTERNS] Saved {len(patterns)} patterns: {patterns}")
         else:
             print("[PATTERNS] No valid patterns extracted from LLM response")
@@ -94,7 +95,7 @@ def discover_patterns(session_token: str) -> None:
         print(f"[PATTERNS] Error during discovery: {exc}")
 
 
-def _fetch_recent_transcripts() -> dict[int, list[str]]:
+def _fetch_recent_transcripts(user_id: int = None) -> dict[int, list[str]]:
     """
     Fetch transcripts from the last 5 completed sessions.
 
@@ -102,38 +103,36 @@ def _fetch_recent_transcripts() -> dict[int, list[str]]:
     -------
     dict mapping session_id → list of transcript strings
     """
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    with get_conn() as conn:
+        cursor = conn.cursor()
 
-    # Get last 5 completed session IDs
-    cursor.execute("""
-        SELECT id FROM sessions
-        WHERE total_turns > 0
-        ORDER BY session_date DESC
-        LIMIT 5
-    """)
-    session_ids = [row[0] for row in cursor.fetchall()]
+        # Get last 5 completed session IDs
+        cursor.execute("""
+            SELECT id FROM sessions
+            WHERE total_turns > 0 AND user_id = %s
+            ORDER BY session_date DESC
+            LIMIT 5
+        """, (user_id,))
+        session_ids = [row[0] for row in cursor.fetchall()]
 
-    if not session_ids:
-        conn.close()
-        return {}
+        if not session_ids:
+            return {}
 
-    placeholders = ",".join("?" for _ in session_ids)
-    cursor.execute(f"""
-        SELECT session_id, transcript
-        FROM turns
-        WHERE session_id IN ({placeholders})
-        ORDER BY session_id, turn_number
-    """, session_ids)
+        placeholders = ",".join("%s" for _ in session_ids)
+        cursor.execute(f"""
+            SELECT session_id, transcript
+            FROM turns
+            WHERE session_id IN ({placeholders})
+            ORDER BY session_id, turn_number
+        """, session_ids)
 
-    from collections import defaultdict
-    transcripts = defaultdict(list)
-    for session_id, transcript in cursor.fetchall():
-        if transcript and transcript.strip():
-            transcripts[session_id].append(transcript.strip())
+        from collections import defaultdict
+        transcripts = defaultdict(list)
+        for session_id, transcript in cursor.fetchall():
+            if transcript and transcript.strip():
+                transcripts[session_id].append(transcript.strip())
 
-    conn.close()
-    return dict(transcripts)
+        return dict(transcripts)
 
 
 def _format_transcripts(transcripts: dict[int, list[str]]) -> str:
@@ -197,19 +196,16 @@ def _parse_patterns(response: str) -> list[str]:
     return patterns
 
 
-def _save_patterns(session_token: str, patterns: list[str]) -> None:
+def _save_patterns(session_token: str, patterns: list[str], user_id: int = None) -> None:
     """
     Save discovered patterns to the user_patterns table.
     """
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    now = datetime.now().isoformat()
+    with get_conn() as conn:
+        cursor = conn.cursor()
+        now = datetime.now().isoformat()
 
-    for pattern_text in patterns:
-        cursor.execute("""
-            INSERT INTO user_patterns (session_token, pattern_text, discovered_at)
-            VALUES (?, ?, ?)
-        """, (session_token, pattern_text, now))
-
-    conn.commit()
-    conn.close()
+        for pattern_text in patterns:
+            cursor.execute("""
+                INSERT INTO user_patterns (session_token, pattern_text, discovered_at, user_id)
+                VALUES (%s, %s, %s, %s)
+            """, (session_token, pattern_text, now, user_id))

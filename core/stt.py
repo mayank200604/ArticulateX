@@ -102,7 +102,7 @@ def _transcribe_assemblyai(audio_array: np.ndarray,
 
     try:
         config = aai.TranscriptionConfig(
-            speech_models=["universal-2"],
+            speech_model=aai.SpeechModel.best,
             disfluencies=True,       # keep um, uh, like etc
             language_code="en",
             punctuate=True,
@@ -271,7 +271,12 @@ class StreamingSTTSession:
             )
 
             self._client = StreamingClient(
-                StreamingClientOptions(api_key=ASSEMBLYAI_API_KEY)
+                StreamingClientOptions(
+                    api_key=ASSEMBLYAI_API_KEY,
+                    connect_timeout=5.0,
+                    max_connection_retries=4,
+                    connection_retry_delay=1.0,
+                )
             )
 
             def on_begin(client, event: BeginEvent):
@@ -291,7 +296,8 @@ class StreamingSTTSession:
                 print(f"[STT-RT] Session terminated: {event.audio_duration_seconds}s")
 
             def on_error(client, error: StreamingError):
-                print(f"[STT-RT] Error: {error}")
+                error_code = getattr(error, 'code', 'UNKNOWN')
+                print(f"[STT-RT] Error: {error} (code: {error_code})")
                 self._error = str(error)
                 self._ready.set()
 
