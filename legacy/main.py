@@ -36,7 +36,8 @@ from freestyle import get_freestyle_prompt
 from weird_situation import get_weird_situation, display_situation
 from topics import (DEBATE_LEVEL_1_TOPICS, DEBATE_LEVEL_2_TOPICS,
     DEBATE_LEVEL_3_TOPICS)
-from utils import record_audio, is_audio_valid
+from core.utils import is_audio_valid
+from core.local_audio import record_audio
 
 load_dotenv()
 

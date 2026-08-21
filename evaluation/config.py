@@ -57,7 +57,7 @@ EVAL_MAX_TOKENS = 4000
 PROVIDERS = {
     "groq": {
         "priority": 1,
-        "model": "llama-3.3-70b-versatile",
+        "model": "qwen/qwen3.6-27b",
         "rpm_limit": 30,        # requests per minute
         "rpd_limit": 14400,     # requests per day
         "tpm_limit": 131072,    # tokens per minute (input)
