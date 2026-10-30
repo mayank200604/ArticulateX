@@ -1,7 +1,7 @@
 """
 llm.py — LLM client with automatic fallback.
 
-Primary:  Groq qwen/qwen3.6-27b
+Primary:  Groq qwen/qwen3.8-27b
 Fallback: Gemini 2.0 Flash
 """
 
@@ -27,7 +27,7 @@ def call_llm(prompt: str, temperature: float = 0.9,
     # Try Groq first
     try:
         response = groq_client.chat.completions.create(
-            model="qwen/qwen3.6-27b",
+            model="qwen/qwen3.8-27b",
             messages=[{"role": "user", "content": prompt}],
             temperature=temperature,
             max_tokens=max_tokens
@@ -42,7 +42,7 @@ def call_llm(prompt: str, temperature: float = 0.9,
         # Fallback to Gemini
         try:
             response = google_client.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-3.8-flash",
                 contents=prompt
             )
             return response.text.strip()
